@@ -1,0 +1,9 @@
+[Unit]
+Description=Automount BTRFS filesystem on {{ mount_entry.device }}
+
+[Automount]
+Where=/mnt/btrfs/{{ mount_entry.device | basename }}
+TimeoutIdleSec=10min
+
+[Install]
+WantedBy=multi-user.target

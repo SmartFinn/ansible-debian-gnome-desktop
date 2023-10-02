@@ -1,0 +1,36 @@
+- name: "General GNOME Settings"
+  ansible.builtin.import_tasks: gnome-settings.yml
+  tags:
+    - gnome-settings
+
+- name: "Install GNOME Shell extensions"
+  ansible.builtin.import_tasks: gnome-shell-extensions.yml
+  tags:
+    - gnome-shell-extensions
+
+- name: "Setup touchpad gestures on X11"
+  ansible.builtin.import_tasks: gnome-gestures.yml
+  tags:
+    - gnome-gestures
+    - never
+
+- name: "Configure GNOME Appearance"
+  ansible.builtin.import_tasks: gnome-appearance.yml
+  tags:
+    - gnome-appearance
+
+- name: "Configure GNOME Display Manager"
+  ansible.builtin.import_tasks: gdm-settings.yml
+  tags:
+    - gdm-settings
+
+- name: "Configure GNOME Apps"
+  ansible.builtin.import_tasks: gnome-apps-settings.yml
+  tags:
+    - gnome-apps-settings
+
+- name: "Set icon for current user account"
+  ansible.builtin.import_tasks: accountsservice.yml
+  tags:
+    - user-icon
+    - never

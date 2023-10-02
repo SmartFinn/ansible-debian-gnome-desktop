@@ -1,0 +1,33 @@
+- name: "AccountsService | Check if user's file exists"
+  become: true
+  ansible.builtin.stat:
+    path: "/var/lib/AccountsService/users/{{ ansible_user_id }}"
+  register: r_accountsservice_current_user
+
+- name: "AccountsService | Copy user icon to icons"
+  become: true
+  ansible.builtin.copy:
+    src: face.png
+    dest: "/var/lib/AccountsService/icons/{{ ansible_user_id }}"
+    mode: '0644'
+
+- name: "AccountsService | Create user's config from template"
+  become: true
+  ansible.builtin.copy:
+    dest: "/var/lib/AccountsService/users/{{ ansible_user_id }}"
+    content: |
+      [User]
+      Session=
+      Icon=/var/lib/AccountsService/icons/{{ ansible_user_id }}
+      SystemAccount=false
+    mode: "0644"
+  when: not r_accountsservice_current_user.stat.exists
+
+- name: "AccountsService | Set icon for user"
+  become: true
+  ansible.builtin.lineinfile:
+    path: "/var/lib/AccountsService/users/{{ ansible_user_id }}"
+    regexp: "^Icon="
+    line: "Icon=/var/lib/AccountsService/icons/{{ ansible_user_id }}"
+    state: present
+  when: r_accountsservice_current_user.stat.exists

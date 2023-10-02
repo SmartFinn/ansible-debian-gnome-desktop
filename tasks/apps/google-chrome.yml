@@ -1,0 +1,33 @@
+- name: "Google Chrome | Install from official repository"
+  become: true
+  when: not force_flatpak|bool
+  block:
+    - name: "Google Chrome | Get GPG key"
+      become: true
+      ansible.builtin.get_url:
+        url: https://dl.google.com/linux/linux_signing_key.pub
+        dest: /etc/apt/trusted.gpg.d/google-chrome.asc
+        mode: '0644'
+
+    - name: "Google Chrome | Add Repository"
+      become: true
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+        filename: google-chrome
+        state: present
+
+    - name: "Google Chrome | Install"
+      become: true
+      ansible.builtin.apt:
+        name: google-chrome-stable
+        state: present
+
+- name: "Google Chrome | Install Flatpak"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak:
+    name: com.google.Chrome
+    remote: flathub
+    method: "{{ flatpak_install_method }}"
+    state: present
+  when: force_flatpak|bool
+  tags: flatpak

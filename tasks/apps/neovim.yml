@@ -1,0 +1,35 @@
+- name: "Neovim | Install from official repository"
+  become: true
+  when: not force_flatpak|bool
+  block:
+    - name: "Neovim | Get GPG key"
+      become: true
+      ansible.builtin.get_url:
+        url: https://proget.makedeb.org/debian-feeds/prebuilt-mpr.pub
+        dest: /etc/apt/trusted.gpg.d/prebuilt-mpr.asc
+        mode: '0644'
+
+    - name: "Neovim | Add Repository"
+      become: true
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=all,amd64] https://proget.makedeb.org prebuilt-mpr {{ ansible_distribution_release }}"
+        filename: prebuilt-mpr
+        state: present
+
+    - name: "Neovim | Install"
+      become: true
+      ansible.builtin.apt:
+        name:
+          - neovim
+          - libluajit-5.1-dev
+        state: present
+
+- name: "Neovim | Install Flatpak"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak:
+    name: io.neovim.nvim
+    remote: flathub
+    method: "{{ flatpak_install_method }}"
+    state: present
+  when: force_flatpak|bool
+  tags: flatpak

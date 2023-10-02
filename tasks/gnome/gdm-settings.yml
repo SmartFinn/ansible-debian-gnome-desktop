@@ -1,0 +1,87 @@
+- name: "GDM | Create /etc/dconf/db/gdm.d directory"
+  become: true
+  ansible.builtin.file:
+    path: /etc/dconf/db/gdm.d
+    state: directory
+    mode: '0755'
+  notify: dconf-update
+
+- name: "GDM | Create dconf profile for GDM"
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/dconf/profile/gdm
+    content: |
+      user-db:user
+      system-db:gdm
+      file-db:/usr/share/gdm/greeter-dconf-defaults
+    mode: '0664'
+  notify: dconf-update
+
+- name: "GDM | Power button action"
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/dconf/db/gdm.d/02-power-button-action
+    content: |
+      [org/gnome/settings-daemon/plugins/power]
+      power-button-action='interactive'
+    mode: '0644'
+  notify: dconf-update
+
+- name: "GDM | Mouse configuration"
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/dconf/db/gdm.d/01-peripherals-mouse
+    content: |
+      [org/gnome/desktop/peripherals/mouse]
+      accel-profile='flat'
+      natural-scroll=false
+    mode: '0644'
+  notify: dconf-update
+
+- name: "GDM | Touchpad configuration"
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/dconf/db/gdm.d/01-peripherals-touchpad
+    content: |
+      [org/gnome/desktop/peripherals/touchpad]
+      natural-scroll=false
+      speed=0.20000000000000001
+      tap-to-click=true
+    mode: '0644'
+  notify: dconf-update
+
+- name: "GDM | Disable event sounds"
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/dconf/db/gdm.d/05-sound
+    content: |
+      [org/gnome/desktop/sound]
+      event-sounds=false
+    mode: '0644'
+  notify: dconf-update
+
+- name: "GDM | Interface settings"
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/dconf/db/gdm.d/08-interface
+    content: |
+      [org/gnome/desktop/interface]
+      clock-show-weekday=true
+    mode: '0644'
+  notify: dconf-update
+
+- name: "GDM | Make sure that Papirus icon theme installed"
+  ansible.builtin.stat:
+    path: /usr/share/icons/Papirus/index.theme
+  register: r_icons_papirus
+
+- name: "GDM | Set Papirus icon theme"
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/dconf/db/gdm.d/10-icon-theme
+    content: |
+      [org/gnome/desktop/interface]
+      icon-theme='Papirus'
+    mode: '0644'
+  notify: dconf-update
+  when: r_icons_papirus.stat.exists

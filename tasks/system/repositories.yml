@@ -1,0 +1,87 @@
+- name: "Repositories | Create copy of /etc/apt/sources.list"
+  become: true
+  ansible.builtin.command:
+    cmd: /bin/cp -p /etc/apt/sources.list /etc/apt/sources.list.orig
+    creates: /etc/apt/sources.list.orig
+
+- name: "Repositories | Create /etc/apt/sources.list from template"
+  become: true
+  ansible.builtin.template:
+    src: etc/apt/sources.list.j2
+    dest: /etc/apt/sources.list
+    mode: '0644'
+
+- name: "Repositories | Debian backports repository"
+  become: true
+  vars:
+    backports_repo: "{{ ansible_distribution_release }}-backports"
+  when: not debian_sid|bool
+  block:
+    - name: "Repositories | Set priority for Debian Backports packages"
+      ansible.builtin.copy:
+        dest: /etc/apt/preferences.d/debian-backports.pref
+        content: |
+          Package: *
+          Pin: release n={{ backports_repo }}
+          Pin-Priority: 500
+        mode: '0644'
+
+    - name: "Repositories | Add Debian Backports repository"
+      ansible.builtin.apt_repository:
+        repo: "deb http://deb.debian.org/debian {{ backports_repo }} main contrib non-free-firmware non-free"
+        filename: debian-backports
+
+- name: "Repositories | Debian Experimental repository"
+  become: true
+  when: debian_sid|bool
+  block:
+    - name: "Repositories | Set priority for Debian Experimental packages"
+      ansible.builtin.copy:
+        dest: /etc/apt/preferences.d/debian-experimental.pref
+        content: |
+          Package: *
+          Pin: release a=experimental
+          Pin-Priority: 50
+        mode: '0644'
+
+    - name: "Repositories | Add Debian Experimental repository"
+      ansible.builtin.apt_repository:
+        repo: "deb https://deb.debian.org/debian experimental main contrib non-free-firmware non-free"
+        filename: debian-experimental
+
+    - name: "Repositories | Remove Debian Backports repository on Debian Sid"
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/apt/preferences.d/debian-backports.pref
+        - /etc/apt/source.list.d/debian-backports.list
+
+- name: "Repositories | Linux Kernel LTS"
+  become: true
+  vars:
+    pin_packages:
+      - 'linux-image-*'
+      - 'firmware-linux*'
+      - 'linux-cpupower'
+      - 'linux-doc'
+      - 'linux-headers-*'
+      - 'linux-libc-dev*'
+      - 'linux-source'
+      - 'linux-perf'
+    pin_release: "{{ 'a=stable' if debian_sid | bool else 'n=' + ansible_distribution_release + '-backports' }}"
+    pin_priority: "{{ '600' if debian_sid | bool else '100' }}"
+  when: kernel_lts|bool
+  block:
+    - name: "Repositories | Set priority for Linux kernel to stay on LTS"
+      ansible.builtin.template:
+        src: etc/apt/preferences.d/linux-kernel-lts.pref.j2
+        dest: /etc/apt/preferences.d/linux-kernel-lts.pref
+        mode: '0644'
+
+    - name: "Repositories | Add Debian Stable repository on Debian Sid"
+      ansible.builtin.apt_repository:
+        repo: "deb http://deb.debian.org/debian stable main contrib non-free-firmware non-free"
+        filename: debian-stable
+      when:
+        - debian_sid|bool

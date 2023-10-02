@@ -1,0 +1,62 @@
+---
+
+# Set true to upgrade Debian to Sid (Unstable) or leave the default for
+# auto-detect
+debian_sid: "{{ ansible_lsb.description | split('/') | last == 'sid' }}"
+
+# Use contrib and non-free components
+non_free: true
+
+# Stay on Linux LTS kernel or upgrade it to newer one
+kernel_lts: true
+
+# Using Flatpak instead of native packages from third-party repos if
+# there is a choice
+force_flatpak: false
+
+# Recommended to keep false until intel-media-driver got version >=23.1.1
+# See https://github.com/intel/media-driver/pull/1589
+modern_intel_driver: false
+
+# Enable this if you have issues with tearing in X11 session
+# see https://wiki.archlinux.org/title/Intel_graphics#Tearing
+xorg_tearfree: false
+
+# The domain name will be added to libvirt virtual machines
+libvirt_domain_name: kvm
+
+# Install Flatpak apps globally for the whole system or only for the current user
+flatpak_install_method: system
+
+extra_packages: []
+
+delete_packages:
+  # GNOME games
+  - aisleriot
+  - five-or-more
+  - four-in-a-row
+  - gnome-2048
+  - gnome-chess
+  - gnome-games
+  - gnome-klotski
+  - gnome-mahjongg
+  - gnome-mines
+  - gnome-nibbles
+  - gnome-robots
+  - gnome-sudoku
+  - gnome-taquin
+  - gnome-tetravex
+  - hitori
+  - lightsoff
+  - quadrapassel
+  - swell-foop
+  - tali
+  # GNOME apps
+  - gnome-weather
+  - gnome-music
+  - rhythmbox
+  - shotwell
+  - gnome-sound-recorder
+  - transmission-gtk
+  # Others
+  - im-config

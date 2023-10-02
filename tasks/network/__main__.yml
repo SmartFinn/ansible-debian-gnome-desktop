@@ -1,0 +1,13 @@
+- name: "Setup Surfshark IKEv2 connection"
+  ansible.builtin.import_tasks: vpn-surfshark-ikev2.yml
+  tags:
+    - vpn
+    - surfshark
+    - never
+
+- name: "Setup Zaborona.help OpenVPN connection"
+  ansible.builtin.import_tasks: vpn-zaborona-openvpn.yml
+  tags:
+    - vpn
+    - zaborona
+    - never

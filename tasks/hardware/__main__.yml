@@ -1,0 +1,37 @@
+- name: "Get list of loaded modules"
+  ansible.builtin.shell:
+    cmd: "lsmod | cut -f1 -d' ' | tail -n +2"
+  changed_when: false
+  register: loaded_modules
+  tags:
+    - always
+
+- name: "Create a list of loaded modules"
+  ansible.builtin.set_fact:
+    modules: "{{ loaded_modules.stdout_lines }}"
+  tags:
+    - always
+
+- name: "Configure Intel video"
+  ansible.builtin.import_tasks: intel-video.yml
+  when: ('i915' in modules)
+  tags:
+    - intel-video
+
+- name: "Setup Intel HDA"
+  ansible.builtin.import_tasks: intel-audio.yml
+  when: ('snd_hda_intel' in modules)
+  tags:
+    - intel-audio
+
+- name: "Setup synaptics touchpad"
+  ansible.builtin.import_tasks: synaptics-touchpad.yml
+  tags:
+    - synaptics-touchpad
+    - never
+
+- name: "Setup Logitech trackball"
+  ansible.builtin.import_tasks: logitech-trackball.yml
+  tags:
+    - logitech-trackball
+    - never

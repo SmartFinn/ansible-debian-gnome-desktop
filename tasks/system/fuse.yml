@@ -1,0 +1,6 @@
+- name: "Allow non-root users to specify mount options"
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/fuse.conf
+    state: present
+    line: "user_allow_other"

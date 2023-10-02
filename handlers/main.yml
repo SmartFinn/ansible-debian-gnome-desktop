@@ -1,0 +1,30 @@
+- name: apt-clean
+  become: true
+  ansible.builtin.command: apt-get -y clean
+
+- name: restart-journald
+  become: true
+  ansible.builtin.systemd:
+    name: systemd-journald.service
+    state: restarted
+    daemon_reload: true
+
+- name: reload-systemd
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: reload-systemd-user
+  ansible.builtin.systemd:
+    scope: user
+    daemon_reload: true
+
+- name: dconf-update
+  become: true
+  ansible.builtin.command:
+    cmd: dconf update
+
+- name: update-grub
+  become: true
+  ansible.builtin.command:
+    cmd: update-grub

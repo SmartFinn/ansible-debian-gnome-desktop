@@ -1,0 +1,37 @@
+- name: "Flameshot | Install"
+  become: true
+  ansible.builtin.apt:
+    name: flameshot
+    state: present
+
+- name: "Flameshot | Unbind Shift+PrtSc"
+  community.general.dconf:
+    key: /org/gnome/shell/keybindings/screenshot
+    value: "@as []"
+    state: present
+
+- name: "Flameshot | Read /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+  community.general.dconf:
+    key: /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings
+    state: read
+  register: r_custom_keybindings
+
+- name: "Flameshot | Binding to Shift+PrtSc"
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-gui/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "binding", value: "'<Shift>Print'" }
+    - { key: "command", value: "'flameshot gui'" }
+    - { key: "name", value: "'Flameshot'" }
+
+- name: "Flameshot | Add new custom keybinding to the list"
+  community.general.dconf:
+    key: /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings
+    value: "{{ (custom_keybindings + added_keybindinns) | unique }}"
+    state: present
+  vars:
+    custom_keybindings: "{{ r_custom_keybindings.value | from_yaml | default([], true) }}"
+    added_keybindinns:
+      - '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-gui/'

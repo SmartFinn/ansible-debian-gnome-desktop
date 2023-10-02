@@ -1,0 +1,42 @@
+- name: "papirus-folders | Check papirus-folders script is installed"
+  ansible.builtin.stat:
+    path: "/usr/bin/papirus-folders"
+  register: r_papirus_folders_file
+
+- name: "papirus-folders | Install"
+  when: not r_papirus_folders_file.stat.exists
+  block:
+    - name: "papirus-folders | Get the latest release tag"
+      ansible.builtin.uri:
+        url: https://github.com/PapirusDevelopmentTeam/papirus-folders/releases/latest
+        follow_redirects: false
+        status_code: 302
+      register: r_papirus_folders_latest
+
+    - name: "papirus-folders | Create temporary directory"
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: ansible-papirus-folders
+      register: r_tempdir
+
+    - name: "papirus-folders | Download tarball"
+      ansible.builtin.unarchive:
+        src: "https://github.com/PapirusDevelopmentTeam/papirus-folders/archive/{{ latest_release_tag }}.tar.gz"
+        dest: "{{ r_tempdir.path }}"
+        extra_opts:
+          - --strip-components=1
+        remote_src: true
+      vars:
+        latest_release_tag: "{{ r_papirus_folders_latest.location | split('/') | last }}"
+      when: r_tempdir.path is defined
+
+    - name: "papirus-folders | Copy files"
+      become: true
+      ansible.builtin.copy:
+        src: "{{ r_tempdir.path }}/{{ item.src }}"
+        dest: "{{ item.dest }}"
+        mode: "{{ item.mode }}"
+      loop:
+        - { src: "papirus-folders", dest: "/usr/bin/papirus-folders", mode: "0755" }
+        - { src: "completion/papirus-folders", dest: "/usr/share/bash-completion/completions/papirus-folders", mode: "0644" }
+        - { src: "completion/_papirus-folders", dest: "/usr/share/zsh/site-functions/_papirus-folders", mode: "0644" }

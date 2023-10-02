@@ -1,0 +1,59 @@
+- name: "CLI apps and utils | Install"
+  become: true
+  ansible.builtin.apt:
+    name:
+      # apps and utils
+      - apg
+      - bat
+      - fd-find
+      - fzf
+      - howdoi
+      - htop
+      - mediainfo
+      - moreutils
+      - newsboat
+      - pandoc
+      - parallel
+      - libimage-exiftool-perl
+      - pipx
+      - gpxinfo
+      - qalc
+      - ranger
+      - rmlint
+      - rsync
+      - sysfsutils
+      - task-spooler
+      - tmux
+      - urlscan
+      - zoxide
+      # file archivers
+      - patool
+      - p7zip-full
+      - cabextract
+      - unrar
+      - zstd
+      # filesystem tools
+      - btrfs-compsize
+      - exfatprogs
+      - f2fs-tools
+      - fatresize
+      - hdparm
+      - lsscsi
+      - zerofree
+      # network tools
+      - arp-scan
+      - ipcalc
+      - iperf3
+      - iw
+      - nmap
+      - telnet
+      # image tools
+      - exiv2
+      - imagemagick
+      - jpegoptim
+      - libavif-bin
+      - librsvg2-bin
+      - optipng
+      # Debian specific
+      - apt-file
+    state: present

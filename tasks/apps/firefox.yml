@@ -1,0 +1,24 @@
+- name: "Firefox | Remove Firefox ESR"
+  become: true
+  ansible.builtin.apt:
+    name: firefox-esr
+    state: absent
+
+- name: "Firefox | Install"
+  become: true
+  ansible.builtin.apt:
+    name: firefox
+    state: present
+  when:
+    - debian_sid|bool
+    - not force_flatpak|bool
+
+- name: "Firefox | Install Flatpak"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak:
+    name: org.mozilla.firefox
+    remote: flathub
+    method: "{{ flatpak_install_method }}"
+    state: present
+  when: not debian_sid|bool or force_flatpak|bool
+  tags: flatpak

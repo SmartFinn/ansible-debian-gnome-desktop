@@ -1,0 +1,5 @@
+- name: "EasyEffects | Install"
+  become: true
+  ansible.builtin.apt:
+    name: easyeffects
+    state: present

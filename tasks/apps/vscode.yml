@@ -1,0 +1,30 @@
+- name: "Visual Studio Code | Install from official repository"
+  become: true
+  when: not force_flatpak|bool
+  block:
+    - name: "Visual Studio Code | Get GPG key"
+      ansible.builtin.get_url:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+        dest: /etc/apt/trusted.gpg.d/vscode.asc
+        mode: '0644'
+
+    - name: "Visual Studio Code | Add Repository"
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+        filename: vscode
+        state: present
+
+    - name: "Visual Studio Code | Install"
+      ansible.builtin.apt:
+        name: code
+        state: present
+
+- name: "Visual Studio Code | Install Flatpak"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak:
+    name: com.visualstudio.code
+    remote: flathub
+    method: "{{ flatpak_install_method }}"
+    state: present
+  when: force_flatpak|bool
+  tags: flatpak

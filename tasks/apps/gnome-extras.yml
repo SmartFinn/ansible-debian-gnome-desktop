@@ -1,0 +1,19 @@
+- name: "GNOME extras | Install"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - dconf-editor
+      - evolution
+      - gnome-tweaks
+      - gucharmap
+      - file-roller
+      - seahorse
+      - gnome-sushi
+      # fonts
+      - fonts-firacode
+      - fonts-roboto
+      - fonts-jetbrains-mono
+      # spellcheck
+      - hunspell-ru
+      - hunspell-uk
+    state: present

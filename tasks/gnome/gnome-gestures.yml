@@ -1,0 +1,32 @@
+- name: "Touchégg | Get GPG key"
+  become: true
+  ansible.builtin.get_url:
+    url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7EA12677D47B593CE22727D4C0FCE32AF6B96252"
+    dest: /etc/apt/trusted.gpg.d/touchegg-ppa.asc
+    mode: '0644'
+
+- name: "Touchégg | Add Repository"
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb http://ppa.launchpad.net/touchegg/stable/ubuntu jammy main"
+    filename: touchegg
+    state: present
+
+- name: "Touchégg | Install"
+  become: true
+  ansible.builtin.apt:
+    name: touchegg
+    state: present
+
+- name: "GNOME gestures on X11 | Enable Touchegg daemon"
+  become: true
+  ansible.builtin.systemd:
+    name: touchegg.service
+    enabled: true
+    state: started
+
+- name: "GNOME gestures on X11 | Install GNOME extension"
+  ansible.builtin.import_tasks: gnome-shell-extensions-install.yml
+  vars:
+    gnome_extensions:
+      - "x11gestures@joseexposito.github.io"

@@ -1,0 +1,14 @@
+- name: "Changing journald configuration"
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/journald.conf
+    state: present
+    regexp: "^#?{{ item | split('=') | first }}"
+    line: "{{ item }}"
+  loop:
+    - RateLimitBurst=500
+    - SystemMaxUse=256M
+    - RuntimeMaxUse=256M
+    - MaxFileSec=1week
+  notify:
+    - restart-journald

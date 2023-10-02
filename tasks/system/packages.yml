@@ -1,0 +1,25 @@
+- name: "Remove specified packages"
+  become: true
+  ansible.builtin.apt:
+    name: "{{ delete_packages | default([]) }}"
+    state: absent
+
+- name: "Update all packages"
+  become: true
+  ansible.builtin.apt:
+    name: "*"
+    update_cache: true
+    state: latest
+  notify: apt-clean
+
+- name: "Install additional packages"
+  become: true
+  ansible.builtin.apt:
+    name: "{{ extra_packages | default([]) }}"
+    state: present
+  notify: apt-clean
+
+- name: "Remove dependencies that are no longer required"
+  become: true
+  ansible.builtin.apt:
+    autoremove: true

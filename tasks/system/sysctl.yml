@@ -1,0 +1,15 @@
+- name: "Enable Magic SysRq key"
+  become: true
+  ansible.posix.sysctl:
+    name: kernel.sysrq
+    value: "1"
+    sysctl_file: /etc/sysctl.d/99-sysrq.conf
+    state: present
+
+- name: "Allow read dmesg with a normal user"
+  become: true
+  ansible.posix.sysctl:
+    name: kernel.dmesg_restrict
+    value: "0"
+    sysctl_file: /etc/sysctl.d/30-dmesg_restrict.conf
+    state: present

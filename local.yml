@@ -1,0 +1,62 @@
+---
+- name: "Setup Debian"
+  hosts: localhost
+  connection: local
+  gather_facts: true
+
+  vars_files:
+    - vars/main.yml
+
+  handlers:
+    - name: "Load handlers"
+      ansible.builtin.import_tasks: handlers/main.yml
+
+  pre_tasks:
+    - name: "Install required packages for this playbook"
+      become: true
+      ansible.builtin.apt:
+        name:
+          - python3-psutil
+          - apt-transport-https
+        state: present
+      tags:
+        - always
+
+  tasks:
+    - name: "Setup system"
+      ansible.builtin.import_tasks: tasks/system/__main__.yml
+      tags:
+        - system
+
+    - name: "Setup network"
+      ansible.builtin.import_tasks: tasks/network/__main__.yml
+      tags:
+        - network
+
+    - name: "Setup hardware"
+      ansible.builtin.import_tasks: tasks/hardware/__main__.yml
+      tags:
+        - hardware
+
+    - name: "Setup GNOME"
+      ansible.builtin.import_tasks: tasks/gnome/__main__.yml
+      tags:
+        - gnome
+
+    - name: "Setup apps"
+      ansible.builtin.import_tasks: tasks/apps/__main__.yml
+      tags:
+        - apps
+        - never
+
+    - name: "Mount BTRFS subvolume id=0"
+      ansible.builtin.import_tasks: tasks/general/mount-btrfs-subvolid0.yml
+      tags:
+        - btrfs-subvolid0
+        - never
+
+    - name: "Download and install dotfiles"
+      ansible.builtin.import_tasks: tasks/general/dotfiles.yml
+      tags:
+        - dotfiles
+        - never

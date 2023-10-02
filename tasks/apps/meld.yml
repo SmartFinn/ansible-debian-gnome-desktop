@@ -1,0 +1,5 @@
+- name: "Meld | Install"
+  become: true
+  ansible.builtin.apt:
+    name: meld
+    state: present

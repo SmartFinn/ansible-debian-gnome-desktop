@@ -1,0 +1,96 @@
+- name: "GNOME Settings | Input sources"
+  community.general.dconf:
+    key: "/org/gnome/desktop/input-sources/{{ item.key }}"
+    value: "{{ item.value | string }}"
+    state: present
+  loop:
+    - { key: "show-all-sources", value: "true" }
+    - { key: "sources", value: "[('xkb', 'us'), ('xkb', 'ru+ruu')]" }
+    - { key: "xkb-options", value: "['lv3:ralt_switch', 'compose:caps']" }
+
+- name: "GNOME Settings | Mouse and touchpad settings"
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "mouse/accel-profile", value: "'flat'" }
+    - { key: "mouse/natural-scroll", value: "false" }
+    - { key: "touchpad/natural-scroll", value: "false" }
+    - { key: "touchpad/tap-to-click", value: "true" }
+    - { key: "touchpad/tap-and-drag-lock", value: "true" }
+
+- name: "GNOME Settings | Sound settings"
+  community.general.dconf:
+    key: "/org/gnome/desktop/sound/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "allow-volume-above-100-percent", value: "true" }
+    - { key: "event-sounds", value: "false" }
+
+- name: "GNOME Settings | Power settings"
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/power/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "power-button-action", value: "'suspend'" }
+    - { key: "sleep-inactive-ac-timeout", value: "1800" }
+    - { key: "sleep-inactive-ac-type", value: "'nothing'" }
+    - { key: "sleep-inactive-battery-timeout", value: "900" }
+
+- name: "GNOME Settings | Privacy settings"
+  community.general.dconf:
+    key: "/org/gnome/desktop/privacy/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "recent-files-max-age", value: "30" }
+    - { key: "remove-old-temp-files", value: "true" }
+    - { key: "remove-old-trash-files", value: "true" }
+
+- name: "GNOME Settings | Night light settings"
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/color/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "night-light-enabled", value: "true" }
+    - { key: "night-light-schedule-automatic", value: "true" }
+
+- name: "GNOME Settings | Mutter settings"
+  community.general.dconf:
+    key: "/org/gnome/mutter/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "attach-modal-dialogs", value: "false" }
+
+- name: "GNOME Settings | GNOME Shell settings"
+  community.general.dconf:
+    key: "/org/gnome/desktop/interface/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "clock-show-weekday", value: "true" }
+    - { key: "enable-hot-corners", value: "false" }
+
+- name: "GNOME Settings | Disable Dash search providers"
+  community.general.dconf:
+    key: "/org/gnome/desktop/search-providers/disabled"
+    value: >-
+      ['org.gnome.clocks.desktop',
+      'org.gnome.seahorse.Application.desktop',
+      'org.gnome.Photos.desktop',
+      'org.gnome.Calendar.desktop',
+      'org.gnome.Software.desktop']
+    state: present
+
+- name: "GNOME Settings | Other settings"
+  community.general.dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "/org/gnome/desktop/thumbnail-cache/maximum-age", value: "30" }

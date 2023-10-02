@@ -1,0 +1,6 @@
+- name: "Scrcpy | Install"
+  become: true
+  ansible.builtin.apt:
+    name: scrcpy
+    state: present
+  when: debian_sid|bool

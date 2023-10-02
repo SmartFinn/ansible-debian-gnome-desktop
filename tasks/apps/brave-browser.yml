@@ -1,0 +1,30 @@
+- name: "Brave Browser | Install from official repository"
+  become: true
+  when: not force_flatpak|bool
+  block:
+    - name: "Brave Browser | Get GPG key"
+      ansible.builtin.get_url:
+        url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+        dest: /usr/share/keyrings/brave-browser-archive-keyring.gpg
+        mode: '0644'
+
+    - name: "Brave Browser | Add Repository"
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
+        filename: brave-browser-release
+        state: present
+
+    - name: "Brave Browser | Install"
+      ansible.builtin.apt:
+        name: brave-browser
+        state: present
+
+- name: "Brave Browser | Install Flatpak"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak:
+    name: com.brave.Browser
+    remote: flathub
+    method: "{{ flatpak_install_method }}"
+    state: present
+  when: force_flatpak|bool
+  tags: flatpak

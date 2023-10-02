@@ -1,0 +1,16 @@
+- name: "Make hostname resolvable"
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    insertafter: '127.0.0.1'
+    search_string: '127.0.1.1'
+    line: "127.0.1.1   {{ hostname }} {{ hostname | split('.') | first }}"
+    state: present
+  when: hostname is defined
+
+- name: "Set a hostname"
+  become: true
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+    use: systemd
+  when: hostname is defined

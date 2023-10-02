@@ -1,0 +1,171 @@
+- name: "GNOME Shell | Install extensions via apt"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - gnome-shell-extension-appindicator
+      - gnome-shell-extension-dashtodock
+      - gnome-shell-extension-gsconnect
+      - gnome-shell-extension-system-monitor
+    state: present
+
+- name: "GNOME Shell | Install and enable extensions"
+  ansible.builtin.import_tasks: gnome-shell-extensions-install.yml
+  vars:
+    gnome_extensions:
+      - "appindicatorsupport@rgcjonas.gmail.com"
+      - "argos@pew.worldwidemann.com"
+      - "autohide-battery@sitnik.ru"
+      - "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
+      - "clipboard-history@alexsaveau.dev"
+      - "dash-to-dock@micxgx.gmail.com"
+      - "drive-menu@gnome-shell-extensions.gcampax.github.com"
+      - "gsconnect@andyholmes.github.io"
+      - "just-perfection-desktop@just-perfection"
+      - "nightthemeswitcher@romainvigier.fr"
+      - "quick-lang-switch@ankostis.gmail.com"
+      - "system-monitor@paradoxxx.zero.gmail.com"
+      - "task-widget@juozasmiskinis.gitlab.io"
+      - "unite@hardpixel.eu"
+      - "user-theme@gnome-shell-extensions.gcampax.github.com"
+      - "windowIsReady_Remover@nunofarruca@gmail.com"
+
+- name: "GNOME Shell | Disable extension version validation"
+  community.general.dconf:
+    key: "/org/gnome/shell/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "disable-extension-version-validation", value: "true" }
+
+- name: "GNOME Shell | Configure AppIndicator"
+  community.general.dconf:
+    key: "/org/gnome/shell/extensions/appindicator/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "icon-opacity", value: "255" }
+    - { key: "icon-size", value: "22" }
+
+- name: "GNOME Shell | Configure Dash to Dock"
+  community.general.dconf:
+    key: "/org/gnome/shell/extensions/dash-to-dock/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "background-color", value: "'rgb(0,0,0)'" }
+    - { key: "background-opacity", value: 0.75 }
+    - { key: "custom-background-color", value: "true" }
+    - { key: "custom-theme-shrink", value: "true" }
+    - { key: "customize-alphas", value: "true" }
+    - { key: "dock-position", value: "'LEFT'" }
+    - { key: "extend-height", value: "true" }
+    - { key: "force-straight-corner", value: "true" }
+    - { key: "icon-size-fixed", value: "true" }
+    - { key: "pressure-threshold", value: 50.0 }
+    - { key: "running-indicator-dominant-color", value: "true" }
+    - { key: "running-indicator-style", value: "'DOTS'" }
+    - { key: "scroll-action", value: "'switch-workspace'" }
+    - { key: "show-mounts", value: "false" }
+    - { key: "show-trash", value: "false" }
+    - { key: "show-windows-preview", value: "false" }
+    - { key: "transparency-mode", value: "'DYNAMIC'" }
+
+- name: "GNOME Shell | Configure Just Perfection"
+  community.general.dconf:
+    key: "/org/gnome/shell/extensions/just-perfection/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "activities-button", value: "false" }
+    - { key: "animation", value: "3" }
+    - { key: "app-menu-icon", value: "false" }
+    - { key: "panel-size", value: "27" }
+    - { key: "search", value: "false" }
+    - { key: "startup-status", value: "0" }
+
+- name: "GNOME Shell | Configure System Monitor"
+  community.general.dconf:
+    key: "/org/gnome/shell/extensions/system-monitor/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "background", value: "'#13131300'" }
+    - { key: "center-display", value: "false" }
+    - { key: "compact-display", value: "false" }
+    - { key: "cpu-display", value: "true" }
+    - { key: "cpu-graph-width", value: "40" }
+    - { key: "cpu-individual-cores", value: "false" }
+    - { key: "cpu-show-text", value: "false" }
+    - { key: "cpu-style", value: "'graph'" }
+    - { key: "fan-show-menu", value: "false" }
+    - { key: "fan-show-text", value: "false" }
+    - { key: "freq-show-menu", value: "true" }
+    - { key: "icon-display", value: "false" }
+    - { key: "memory-cache-color", value: "'#aaf5d0bb'" }
+    - { key: "memory-display", value: "false" }
+    - { key: "memory-graph-width", value: "40" }
+    - { key: "memory-show-text", value: "false" }
+    - { key: "move-clock", value: "false" }
+    - { key: "net-collisions-color", value: "'#d0444400'" }
+    - { key: "net-down-color", value: "'#3584e4ff'" }
+    - { key: "net-downerrors-color", value: "'#ff6e0000'" }
+    - { key: "net-graph-width", value: "40" }
+    - { key: "net-show-text", value: "false" }
+    - { key: "net-speed-in-bits", value: "true" }
+    - { key: "net-style", value: "'graph'" }
+    - { key: "net-up-color", value: "'#33d17aff'" }
+    - { key: "net-uperrors-color", value: "'#e0006d00'" }
+    - { key: "show-tooltip", value: "true" }
+
+- name: "GNOME Shell | Configure Unite"
+  community.general.dconf:
+    key: "/org/gnome/shell/extensions/unite/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "autofocus-windows", value: "false" }
+    - { key: "desktop-name-text", value: "'Desktop'" }
+    - { key: "extend-left-box", value: "false" }
+    - { key: "notifications-position", value: "'center'" }
+    - { key: "show-legacy-tray", value: "false" }
+    - { key: "show-window-buttons", value: "'never'" }
+
+- name: "GNOME Shell | Clipboard History"
+  community.general.dconf:
+    key: "/org/gnome/shell/extensions/clipboard-history/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "cache-only-favorites", value: "false" }
+    - { key: "cache-size", value: "10" }
+    - { key: "history-size", value: "200" }
+    - { key: "paste-on-selection", value: "false" }
+    - { key: "preview-size", value: "40" }
+
+- name: "GNOME Shell | Night Theme Switcher"
+  community.general.dconf:
+    key: "/org/gnome/shell/extensions/nightthemeswitcher/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "gtk-variants/day", value: "'Adwaita'" }
+    - { key: "gtk-variants/enabled", value: "true" }
+    - { key: "gtk-variants/night", value: "'Adwaita-dark'" }
+    - { key: "time/always-enable-ondemand", value: "true" }
+    - { key: "time/ondemand-button-placement", value: "'menu'" }
+    - { key: "time/ondemand-time", value: "'night'" }
+    - { key: "time/offset", value: "1" }
+    - { key: "time/time-source", value: "'nightlight'" }
+
+- name: "GNOME Shell | Task Widget"
+  community.general.dconf:
+    key: "/org/gnome/shell/extensions/task-widget/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "hct-astod-hour", value: "21" }
+    - { key: "hide-completed-tasks", value: "3" }
+    - { key: "hide-empty-completed-task-lists", value: "true" }
+    - { key: "hide-header-for-singular-task-lists", value: "true" }
+    - { key: "last-active", value: "'merge'" }
+    - { key: "merge-task-lists", value: "true" }

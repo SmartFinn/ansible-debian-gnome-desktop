@@ -1,0 +1,7 @@
+- name: "digiKam | Install Flatpak"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak:
+    name: org.kde.digikam
+    remote: flathub
+    method: "{{ flatpak_install_method }}"
+    state: present

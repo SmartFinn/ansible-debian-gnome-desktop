@@ -1,0 +1,27 @@
+- name: "btrfs-list | Get the latest release tag"
+  ansible.builtin.uri:
+    url: https://github.com/speed47/btrfs-list/releases/latest
+    follow_redirects: false
+    status_code: 302
+  register: r_btrfs_list_latest
+
+- name: "btrfs-list | Install dependencies"
+  become: true
+  ansible.builtin.apt:
+    name: libperl-version-perl
+    state: present
+
+- name: "btrfs-list | Download and install"
+  become: true
+  ansible.builtin.unarchive:
+    src: "https://github.com/speed47/btrfs-list/archive/{{ latest_release_tag }}.tar.gz"
+    dest: "/usr/local/bin/"
+    include:
+      - "btrfs-list-{{ latest_release_tag | replace('v', '', 1) }}/btrfs-list"
+    extra_opts:
+      - --strip-components=1
+    creates: "/usr/local/bin/btrfs-list"
+    mode: '0755'
+    remote_src: true
+  vars:
+    latest_release_tag: "{{ r_btrfs_list_latest.location | split('/') | last }}"

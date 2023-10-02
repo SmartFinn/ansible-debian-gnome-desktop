@@ -1,0 +1,19 @@
+- name: "Google Cloud CLI | Get GPG key"
+  become: true
+  ansible.builtin.get_url:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    dest: /etc/apt/trusted.gpg.d/google-cloud-sdk.asc
+    mode: '0644'
+
+- name: "Google Cloud CLI | Add Repository"
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb https://packages.cloud.google.com/apt cloud-sdk main"
+    filename: google-cloud-sdk
+    state: present
+
+- name: "Google Cloud CLI | Install"
+  become: true
+  ansible.builtin.apt:
+    name: google-cloud-cli
+    state: present

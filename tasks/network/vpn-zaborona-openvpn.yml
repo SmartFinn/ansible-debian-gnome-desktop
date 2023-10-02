@@ -1,0 +1,56 @@
+- name: "Add Zaborona.help connections | NetworkManager"
+  vars:
+    zaborona_help_servers:
+      - srv0.vpn.zaboronahelp.pp.ua:1196
+    zaborona_help_certs:
+      # order of the ca cert, user cert, and key shouldn't be changed
+      - { url: "https://zaborona.help/ca.crt", path: "/etc/NetworkManager/cert/zaborona-help-ca.crt", mode: '0644' }
+      - { url: "https://zaborona.help/zaborona-help.crt", path: "/etc/NetworkManager/cert/zaborona-help.crt", mode: '0644' }
+      - { url: "https://zaborona.help/zaborona-help.key", path: "/etc/NetworkManager/cert/zaborona-help.key", mode: '0600' }
+  block:
+    - name: "Install required plugins"
+      become: true
+      ansible.builtin.package:
+        name: network-manager-openvpn-gnome
+
+    - name: "Create required directories for certs"
+      become: true
+      ansible.builtin.file:
+        path: "{{ item.path | dirname }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ zaborona_help_certs }}"
+
+    - name: "Download certificates"
+      become: true
+      ansible.builtin.get_url:
+        url: "{{ item.url }}"
+        dest: "{{ item.path }}"
+        mode: "{{ item.mode }}"
+      loop: "{{ zaborona_help_certs }}"
+
+    - name: "Create an OpenVPN connection to Zaborona.help"
+      community.general.nmcli:
+        type: vpn
+        conn_name: "zaborona.help"
+        vpn:
+          service-type: org.freedesktop.NetworkManager.openvpn
+          remote: "{{ zaborona_help_servers | join(',') }}"
+          ca: "{{ zaborona_help_certs[0].path }}"
+          cert: "{{ zaborona_help_certs[1].path }}"
+          key: "{{ zaborona_help_certs[2].path }}"
+          cert-pass-flags: 0
+          remote-cert-tls: server
+          cipher: "none"
+          dev: tun
+          dev-type: tun
+          proto-tcp: true
+          connection-type: tls
+        autoconnect: false
+        dns4_ignore_auto: true
+        never_default4: true
+        method6: disabled
+        state: present
+      when: >
+        zaborona_help_servers is defined and
+        zaborona_help_certs is defined

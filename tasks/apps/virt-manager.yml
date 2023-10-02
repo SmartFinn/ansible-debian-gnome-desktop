@@ -1,0 +1,90 @@
+- name: "Virt-Manager | Install"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - virt-manager
+      # The packages below are dependencies for virt-manager,
+      # and they are required for Ansible libvirt collection
+      # - python3-lxml
+      # - python3-libvirt
+    state: present
+
+- name: "Libvirt | Add the current user to 'libvirt' group"
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    groups: libvirt
+    append: true
+    state: present
+
+- name: "Create a service for configuration resolvectl"
+  become: true
+  ansible.builtin.template:
+    src: etc/systemd/system/resolvectl-dns-virbr.service.j2
+    dest: "/etc/systemd/system/resolvectl-dns-{{ item }}.service"
+    mode: '0644'
+  loop: "{{ ansible_interfaces | select('match', '^virbr[0-9]+$') }}"
+
+- name: "Enable the service for configuration resolvectl"
+  become: true
+  ansible.builtin.systemd:
+    name: "resolvectl-dns-{{ item }}.service"
+    enabled: true
+    daemon_reload: true
+    state: started
+  loop: "{{ ansible_interfaces | select('match', '^virbr[0-9]+$') }}"
+
+- name: "Configure default libvirt network"
+  become: true
+  block:
+    - name: "Get libvirt default network config"
+      community.libvirt.virt_net:
+        name: default
+        command: get_xml
+      register: r_default_net
+
+    - name: "Create libvirt default net xml from data"
+      ansible.builtin.copy:
+        content: "{{ r_default_net.get_xml }}"
+        dest: /tmp/libvirt_default_net.xml
+        mode: '0644'
+
+    - name: "Add Domain to libvirt default net xml"
+      ansible.builtin.lineinfile:
+        line: "  <domain name='{{ libvirt_domain_name }}' localOnly='yes'/>"
+        dest: /tmp/libvirt_default_net.xml
+        regexp: "^  <domain.*/>$"
+        insertbefore: '</network>'
+      register: r_net_domain
+
+    - name: "Stop libvirt default net"
+      community.libvirt.virt_net:
+        name: default
+        command: destroy
+      failed_when: false
+      when: r_net_domain.changed
+
+    - name: "Delete libvirt default net"
+      community.libvirt.virt_net:
+        name: default
+        command: undefine
+      when: r_net_domain.changed
+
+    - name: "Copy remote network xml to ansible control node"
+      ansible.builtin.fetch:
+        src: /tmp/libvirt_default_net.xml
+        dest: /tmp/libvirt_default_net.xml
+      when: not ansible_connection == "local"
+
+    - name: "Configure libvirt default net from xml"
+      community.libvirt.virt_net:
+        name: default
+        command: define
+        xml: "{{ lookup('file', '/tmp/libvirt_default_net.xml') }}"
+      when: r_net_domain.changed
+
+    - name: "Start default net"
+      community.libvirt.virt_net:
+        name: default
+        command: start
+      when: r_net_domain.changed

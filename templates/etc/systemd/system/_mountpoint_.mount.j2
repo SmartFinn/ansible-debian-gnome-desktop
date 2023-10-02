@@ -1,0 +1,11 @@
+[Unit]
+Description=BTRFS filesystem mounted on {{ mount_entry.device }}
+
+[Mount]
+What=/dev/disk/by-uuid/{{ mount_entry.uuid }}
+Where=/mnt/btrfs/{{ mount_entry.device|basename }}
+Type=btrfs
+Options=defaults,noauto,subvolid=0
+
+[Install]
+WantedBy=multi-user.target

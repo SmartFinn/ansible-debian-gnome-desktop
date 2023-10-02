@@ -1,0 +1,56 @@
+- name: "GNOME | Install Papirus icon theme"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - papirus-icon-theme
+    state: present
+
+- name: "GNOME | Force 'gnome' as default theme engine for Qt apps"
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/environment.d/60-qt_qpa_platformtheme.conf
+    content: |
+      QT_QPA_PLATFORMTHEME=gnome
+    mode: '0644'
+
+- name: "GNOME | Setup backgrounds"
+  community.general.dconf:
+    key: "/org/gnome/desktop/background/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "primary-color", value: "'#000000000000'" }
+    - { key: "secondary-color", value: "'#000000000000'" }
+
+- name: "GNOME | Window buttons layout"
+  community.general.dconf:
+    key: "/org/gnome/desktop/wm/preferences/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "button-layout", value: "'appmenu:minimize,maximize,close'" }
+
+- name: "GNOME | Set GTK and icon themes"
+  community.general.dconf:
+    key: "/org/gnome/desktop/interface/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "color-scheme", value: "'default'" }
+    - { key: "cursor-theme", value: "'Adwaita'" }
+    - { key: "gtk-theme", value: "'Adwaita'" }
+    - { key: "icon-theme", value: "'Papirus'" }
+
+- name: "GNOME | Setup Night Theme Switcher extension"
+  community.general.dconf:
+    key: "/org/gnome/shell/extensions/nightthemeswitcher/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "commands/enabled", value: "true" }
+    - { key: "gtk-variants/day", value: "'Adwaita'" }
+    - { key: "gtk-variants/enabled", value: "true" }
+    - { key: "gtk-variants/night", value: "'Adwaita-dark'" }
+    - { key: "icon-variants/day", value: "'Papirus'" }
+    - { key: "icon-variants/enabled", value: "true" }
+    - { key: "icon-variants/night", value: "'Papirus-Dark'" }

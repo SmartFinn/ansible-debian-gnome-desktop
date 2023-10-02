@@ -1,0 +1,78 @@
+- name: "Add Surfshark IKEv2 connections | NetworkManager"
+  vars:
+    surfshark_base_servers:
+      - pl-gdn.prod.surfshark.com
+      - de-ber.prod.surfshark.com
+      - us-nyc.prod.surfshark.com
+  block:
+    - name: "Install required plugins"
+      become: true
+      ansible.builtin.package:
+        name: network-manager-strongswan
+
+    - name: "Create required directories in /etc/NetworkManager/"
+      become: true
+      ansible.builtin.file:
+        path: "/etc/NetworkManager/{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - cert
+        - dispatcher.d
+
+    - name: "Disable eap-peap plugin for charon-nm"
+      become: true
+      ansible.builtin.copy:
+        src: etc/strongswan/strongswan.d/nm-disable-eap-peap.conf
+        dest: /etc/strongswan/strongswan.d/nm-disable-eap-peap.conf
+        mode: '0644'
+
+    - name: "Copy Surfshark IKEv2 key"
+      become: true
+      ansible.builtin.copy:
+        src: etc/NetworkManager/cert/surfshark_ikev2.crt
+        dest: /etc/NetworkManager/cert/surfshark_ikev2.crt
+        mode: '0644'
+
+    - name: "Copy scripts in /etc/NetworkManager/dispatcher.d"
+      become: true
+      ansible.builtin.copy:
+        src: "etc/NetworkManager/dispatcher.d/{{ item }}"
+        dest: "/etc/NetworkManager/dispatcher.d/{{ item }}"
+        mode: '0755'
+      loop:
+        - vpn-up
+        - vpn-down
+
+    - name: "Create a VPN IKEv2 connection to Surfshark"
+      community.general.nmcli:
+        type: vpn
+        conn_name: "{{ item }}"
+        vpn:
+          service-type: org.freedesktop.NetworkManager.strongswan
+          address: "{{ item }}"
+          certificate: "/etc/NetworkManager/cert/surfshark_ikev2.crt"
+          user: "{{ surfshark_username | default('') }}"
+          password-flags: 0
+          proposal: false
+          encap: false
+          ipcomp: false
+          method: eap
+          virtual: true
+        autoconnect: false
+        dns4:
+          - 1.1.1.1
+          - 1.0.0.1
+        dns4_ignore_auto: true
+        method6: disabled
+        state: present
+      loop: "{{ surfshark_servers | default(surfshark_base_servers) }}"
+      register: nm_connections
+
+    - name: "Set password for Surfshark VPN connections"
+      ansible.builtin.command: >-
+        nmcli connection modify "{{ item.item }}"
+        vpn.secrets "password={{ surfshark_password }}"
+      when: item.changed and surfshark_password is defined
+      loop: "{{ nm_connections.results }}"
+      no_log: true

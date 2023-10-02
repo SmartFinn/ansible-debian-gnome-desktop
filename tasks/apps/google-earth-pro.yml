@@ -1,0 +1,7 @@
+- name: "Google Earth Pro | Install Flatpak"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak:
+    name: com.google.EarthPro
+    remote: flathub
+    method: "{{ flatpak_install_method }}"
+    state: present

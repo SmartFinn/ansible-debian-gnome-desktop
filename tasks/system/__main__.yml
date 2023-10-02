@@ -1,0 +1,40 @@
+- name: "Set timezone"
+  ansible.builtin.import_tasks: timezone.yml
+
+- name: "Set hostname, add hostname to hosts"
+  ansible.builtin.import_tasks: hostname.yml
+
+- name: "Set sysctl options"
+  ansible.builtin.import_tasks: sysctl.yml
+
+- name: "Configure journald"
+  ansible.builtin.import_tasks: journald.yml
+
+- name: "Configure systemd"
+  ansible.builtin.import_tasks: systemd.yml
+
+- name: "Configure apt"
+  ansible.builtin.import_tasks: apt.yml
+
+- name: "Setup ZRAM"
+  ansible.builtin.import_tasks: zram.yml
+
+- name: "Configure FUSE"
+  ansible.builtin.import_tasks: fuse.yml
+
+- name: "Configure software repositories"
+  ansible.builtin.import_tasks: repositories.yml
+
+- name: "Install/remove/update packages"
+  ansible.builtin.import_tasks: packages.yml
+
+- name: "Install Flatpak"
+  ansible.builtin.import_tasks: flatpak.yml
+  tags:
+    - flatpak
+
+- name: "Configure GRUB2"
+  ansible.builtin.import_tasks: grub.yml
+
+- name: "Disable TPM module in GRUB2"
+  ansible.builtin.import_tasks: grub-disable-tpm.yml

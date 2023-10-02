@@ -1,0 +1,12 @@
+- name: "Install synaptics touchpad driver"
+  become: true
+  ansible.builtin.apt:
+    name: xserver-xorg-input-synaptics
+    state: present
+
+- name: "Setup synaptics touchpad"
+  become: true
+  ansible.builtin.copy:
+    src: etc/X11/xorg.conf.d/52-synaptics-touchpad.conf
+    dest: /etc/X11/xorg.conf.d/52-synaptics-touchpad.conf
+    mode: '0644'

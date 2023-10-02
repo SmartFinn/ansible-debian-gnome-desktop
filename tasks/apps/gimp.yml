@@ -1,0 +1,9 @@
+- name: "GIMP | Install Flatpak"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak:
+    name:
+      - org.gimp.GIMP
+      - org.gtk.Gtk3theme.Adwaita-dark
+    remote: flathub
+    method: "{{ flatpak_install_method }}"
+    state: present

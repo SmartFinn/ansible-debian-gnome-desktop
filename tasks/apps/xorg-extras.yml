@@ -1,0 +1,10 @@
+- name: "Xorg extras | Install"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - devilspie2
+      - ssh-askpass-gnome
+      - wmctrl
+      - xsel
+      - x11-utils
+    state: present

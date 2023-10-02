@@ -1,0 +1,44 @@
+- name: "BTRFS subvolume ID 0 | Create mountpoint"
+  become: true
+  ansible.builtin.file:
+    path: "/mnt/btrfs/{{ mount_entry.device | basename }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ ansible_mounts | selectattr('fstype', 'equalto', 'btrfs') }}"
+  loop_control:
+    loop_var: mount_entry
+    label: "{{ mount_entry.device }}"
+
+- name: "BTRFS subvolume ID 0 | Create .mount systemd unit"
+  become: true
+  ansible.builtin.template:
+    src: etc/systemd/system/_mountpoint_.mount.j2
+    dest: "/etc/systemd/system/mnt-btrfs-{{ mount_entry.device | basename }}.mount"
+    mode: '0644'
+  loop: "{{ ansible_mounts | selectattr('fstype', 'equalto', 'btrfs') }}"
+  loop_control:
+    loop_var: mount_entry
+    label: "{{ mount_entry.device }}"
+
+- name: "BTRFS subvolume ID 0 | Create .automount systemd unit"
+  become: true
+  ansible.builtin.template:
+    src: etc/systemd/system/_mountpoint_.automount.j2
+    dest: "/etc/systemd/system/mnt-btrfs-{{ mount_entry.device | basename }}.automount"
+    mode: '0644'
+  loop: "{{ ansible_mounts | selectattr('fstype', 'equalto', 'btrfs') }}"
+  loop_control:
+    loop_var: mount_entry
+    label: "{{ mount_entry.device }}"
+
+- name: "BTRFS subvolume ID 0 | Enable automount unit"
+  become: true
+  ansible.builtin.systemd:
+    name: "mnt-btrfs-{{ mount_entry.device | basename }}.automount"
+    enabled: true
+    state: started
+    daemon_reload: true
+  loop: "{{ ansible_mounts | selectattr('fstype', 'equalto', 'btrfs') }}"
+  loop_control:
+    loop_var: mount_entry
+    label: "{{ mount_entry.device }}"

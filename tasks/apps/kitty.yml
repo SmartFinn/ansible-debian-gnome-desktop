@@ -1,0 +1,7 @@
+- name: "Kitty | Install"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - kitty
+      - kitty-doc
+    state: present

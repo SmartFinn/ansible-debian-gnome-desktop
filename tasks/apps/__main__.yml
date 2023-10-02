@@ -1,0 +1,283 @@
+- name: "Install BackInTime"
+  ansible.builtin.import_tasks: backintime.yml
+  tags:
+    - backintime
+    - desktop
+
+- name: "Install Barrier"
+  ansible.builtin.import_tasks: barrier.yml
+  tags:
+    - barrier
+
+- name: "Install Brave Browser"
+  ansible.builtin.import_tasks: brave-browser.yml
+  tags:
+    - brave-browser
+
+- name: "Install btdu"
+  ansible.builtin.import_tasks: btdu.yml
+  tags:
+    - btdu
+    - cli
+
+- name: "Install btrfs-list"
+  ansible.builtin.import_tasks: btrfs-list.yml
+  tags:
+    - btrfs-list
+    - cli
+
+- name: "Install CLI utils"
+  ansible.builtin.import_tasks: cli-utils.yml
+  tags:
+    - cli
+
+- name: "Install Crow Translate"
+  ansible.builtin.import_tasks: crow-translate.yml
+  tags:
+    - crow-translate
+    - flatpak
+    - desktop
+
+- name: "Install dev tools"
+  ansible.builtin.import_tasks: dev-tools.yml
+  tags:
+    - dev
+
+- name: "Install digiKam"
+  ansible.builtin.import_tasks: digikam.yml
+  tags:
+    - digikam
+    - flatpak
+    - desktop
+
+- name: "Install EasyEffects"
+  ansible.builtin.import_tasks: easyeffects.yml
+  tags:
+    - easyeffects
+
+- name: "Install Firefox"
+  ansible.builtin.import_tasks: firefox.yml
+  tags:
+    - firefox
+
+- name: "Install Flameshot"
+  ansible.builtin.import_tasks: flameshot.yml
+  tags:
+    - flameshot
+    - desktop
+
+- name: "Install Flatseal"
+  ansible.builtin.import_tasks: flatseal.yml
+  tags:
+    - flatseal
+    - flatpak
+    - desktop
+
+- name: "Install GIMP"
+  ansible.builtin.import_tasks: gimp.yml
+  tags:
+    - gimp
+    - flatpak
+    - desktop
+
+- name: "Install GNOME extras"
+  ansible.builtin.import_tasks: gnome-extras.yml
+  tags:
+    - desktop
+
+- name: "Install Google Chrome"
+  ansible.builtin.import_tasks: google-chrome.yml
+  tags:
+    - google-chrome
+
+- name: "Install Google Cloud Cli"
+  ansible.builtin.import_tasks: google-cloud-sdk.yml
+  tags:
+    - google-cloud-cli
+
+- name: "Install Google Earth Pro"
+  ansible.builtin.import_tasks: google-earth-pro.yml
+  tags:
+    - google-earth-pro
+    - flatpak
+
+- name: "Install Gpick"
+  ansible.builtin.import_tasks: gpick.yml
+  tags:
+    - gpick
+    - desktop
+
+- name: "Install GPXSee"
+  ansible.builtin.import_tasks: gpxsee.yml
+  tags:
+    - gpxsee
+    - desktop
+
+- name: "Install imv"
+  ansible.builtin.import_tasks: imv.yml
+  tags:
+    - imv
+    - desktop
+
+- name: "Install Inkscape"
+  ansible.builtin.import_tasks: inkscape.yml
+  tags:
+    - inkscape
+    - flatpak
+
+- name: "Install JOSM"
+  ansible.builtin.import_tasks: josm.yml
+  tags:
+    - josm
+    - flatpak
+
+- name: "Install KeePassXC"
+  ansible.builtin.import_tasks: keepassxc.yml
+  tags:
+    - keepassxc
+    - desktop
+
+- name: "Install Kitty terminal"
+  ansible.builtin.import_tasks: kitty.yml
+  tags:
+    - kitty
+    - desktop
+
+- name: "Install Meld"
+  ansible.builtin.import_tasks: meld.yml
+  tags:
+    - meld
+    - dev
+
+- name: "Install MPV"
+  ansible.builtin.import_tasks: mpv.yml
+  tags:
+    - mpv
+    - desktop
+
+- name: "Install Neovim"
+  ansible.builtin.import_tasks: neovim.yml
+  tags:
+    - neovim
+    - dev
+
+- name: "Install Obsidian"
+  ansible.builtin.import_tasks: obsidian.yml
+  tags:
+    - obsidian
+    - flatpak
+    - desktop
+
+- name: "Install Peek"
+  ansible.builtin.import_tasks: peek.yml
+  tags:
+    - peek
+
+- name: "Install qBittorent"
+  ansible.builtin.import_tasks: qbittorrent.yml
+  tags:
+    - qbittorrent
+    - desktop
+
+- name: "Install QGIS"
+  ansible.builtin.import_tasks: qgis.yml
+  tags:
+    - qgis
+    - flatpak
+
+- name: "Install rofi"
+  ansible.builtin.import_tasks: rofi.yml
+  tags:
+    - rofi
+    - desktop
+
+- name: "Install Scrcpy util"
+  ansible.builtin.import_tasks: scrcpy.yml
+  tags:
+    - scrcpy
+
+- name: "Install Signal"
+  ansible.builtin.import_tasks: signal.yml
+  tags:
+    - signal
+    - flatpak
+
+- name: "Install Spotify"
+  ansible.builtin.import_tasks: spotify.yml
+  tags:
+    - spotify
+    - flatpak
+
+- name: "Install SQLiteBrowser"
+  ansible.builtin.import_tasks: sqlitebrowser.yml
+  tags:
+    - sqlitebrowser
+    - flatpak
+
+- name: "Install Syncthing"
+  ansible.builtin.import_tasks: syncthing.yml
+  tags:
+    - syncthing
+    - desktop
+
+- name: "Install papirus-folders"
+  ansible.builtin.import_tasks: papirus-folders.yml
+  tags:
+    - papirus-folders
+
+- name: "Install Telegram Desktop"
+  ansible.builtin.import_tasks: telegram-desktop.yml
+  tags:
+    - telegram-desktop
+    - desktop
+
+- name: "Install Timeshift"
+  ansible.builtin.import_tasks: timeshift.yml
+  tags:
+    - timeshift
+
+- name: "Install Wine"
+  ansible.builtin.import_tasks: wine.yml
+  tags:
+    - wine
+    - flatpak
+
+- name: "Install virt-manager"
+  ansible.builtin.import_tasks: virt-manager.yml
+  tags:
+    - virt-manager
+    - libvirt
+
+- name: "Install Visual Studio Code"
+  ansible.builtin.import_tasks: vscode.yml
+  tags:
+    - vscode
+    - dev
+
+- name: "Install Wireshark"
+  ansible.builtin.import_tasks: wireshark.yml
+  tags:
+    - wireshark
+
+- name: "Install Xorg extras"
+  ansible.builtin.import_tasks: xorg-extras.yml
+  tags:
+    - xorg-extras
+    - desktop
+
+- name: "Install Zeal"
+  ansible.builtin.import_tasks: zeal.yml
+  tags:
+    - zeal
+    - dev
+
+- name: "Install ZeroTier"
+  ansible.builtin.import_tasks: zerotier.yml
+  tags:
+    - zerotier
+
+- name: "Install ZSH"
+  ansible.builtin.import_tasks: zsh.yml
+  tags:
+    - zsh
+    - cli

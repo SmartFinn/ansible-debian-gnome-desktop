@@ -1,0 +1,207 @@
+- name: "GNOME Apps Settings | Clocks"
+  community.general.dconf:
+    key: "/org/gnome/clocks/{{ item.key }}"
+    value: "{{ item.value | string }}"
+    state: present
+  loop:
+    - { key: "world-clocks", value: "[{'location': <(uint32 2, <('Coordinated Universal Time (UTC)', '@UTC', false, @a(dd) [], @a(dd) [])>)>}]" }
+
+- name: "GNOME Apps Settings | Text Editor"
+  community.general.dconf:
+    key: "/org/gnome/TextEditor/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "custom-font", value: "'Fira Code 10'" }
+    - { key: "highlight-current-line", value: "true" }
+    - { key: "indent-style", value: "'space'" }
+    - { key: "show-line-numbers", value: "true" }
+    - { key: "show-right-margin", value: "true" }
+    - { key: "spellcheck", value: "true" }
+    - { key: "style-scheme", value: "'peninsula'" }
+    - { key: "tab-width", value: "uint32 4" }
+    - { key: "use-system-font", value: "false" }
+    - { key: "wrap-text", value: "true" }
+
+- name: "GNOME Apps Settings | GNOME Calculator"
+  community.general.dconf:
+    key: "/org/gnome/calculator/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "button-mode", value: "'keyboard'" }
+
+- name: "GNOME Apps Settings | EasyTag"
+  community.general.dconf:
+    key: "/org/gnome/easytag/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "fill-set-default-comment", value: "false" }
+    - { key: "id3v2-unicode-charset", value: "'UTF-16'" }
+    - { key: "rename-file-default-mask", value: "'%t'" }
+
+- name: "GNOME Apps Settings | Eye Of GNOME"
+  community.general.dconf:
+    key: "/org/gnome/eog/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "plugins/active-plugins", value: "['statusbar-date', 'fullscreen']" }
+    - { key: "ui/sidebar", value: "false" }
+    - { key: "view/background-color", value: "'rgb(46,52,54)'" }
+    - { key: "view/trans-color", value: "'rgb(46,52,54)'" }
+    - { key: "view/transparency", value: "'background'" }
+
+- name: "GNOME Apps Settings | Evolution"
+  community.general.dconf:
+    key: "/org/gnome/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "evolution-data-server/calendar/notify-with-tray", value: "false" }
+    - { key: "evolution/calendar/day-end-hour", value: "18" }
+    - { key: "evolution/calendar/day-start-hour", value: "8" }
+    - { key: "evolution/calendar/hide-cancelled-tasks", value: "true" }
+    - { key: "evolution/calendar/hide-completed-tasks", value: "true" }
+    - { key: "evolution/calendar/hide-completed-tasks-value", value: "3" }
+    - { key: "evolution/calendar/show-icons-month-view", value: "true" }
+    - { key: "evolution/calendar/task-due-today-color", value: "'#ededd4d40000'" }
+    - { key: "evolution/calendar/time-divisions", value: "30" }
+    - { key: "evolution/calendar/use-24hour-format", value: "true" }
+    - { key: "evolution/calendar/week-start-day-name", value: "'monday'" }
+
+- name: "GNOME Apps Settings | File Roller"
+  community.general.dconf:
+    key: "/org/gnome/file-roller/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "listing/show-path", value: "false" }
+
+- name: "GNOME Apps Settings | GNOME System Monitor"
+  community.general.dconf:
+    key: "/org/gnome/gnome-system-monitor/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "show-dependencies", value: "true" }
+
+- name: "GNOME Apps Settings | File chooser"
+  community.general.dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "/org/gtk/gtk4/settings/file-chooser/sort-directories-first", value: "true" }
+    - { key: "/org/gtk/settings/file-chooser/show-size-column", value: "false" }
+    - { key: "/org/gtk/settings/file-chooser/show-type-column", value: "false" }
+    - { key: "/org/gtk/settings/file-chooser/sort-directories-first", value: "true" }
+    - { key: "/org/gtk/settings/file-chooser/startup-mode", value: "'cwd'" }
+
+- name: "GNOME Apps Settings | Meld"
+  community.general.dconf:
+    key: "/org/gnome/meld/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "folder-status-filters", value: "['new', 'modified']" }
+    - { key: "highlight-current-line", value: "true" }
+    - { key: "highlight-syntax", value: "true" }
+    - { key: "indent-width", value: "4" }
+    - { key: "show-line-numbers", value: "true" }
+    - { key: "style-scheme", value: "'meld-dark'" }
+    - { key: "vc-left-is-local", value: "true" }
+    - { key: "vc-merge-file-order", value: "'local-merge-remote'" }
+
+- name: "GNOME Apps Settings | Nautilus"
+  community.general.dconf:
+    key: "/org/gnome/nautilus/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "icon-view/default-zoom-level", value: "'small'" }
+    - { key: "list-view/default-zoom-level", value: "'small'" }
+    - { key: "preferences/recursive-search", value: "'never'" }
+    - { key: "preferences/show-delete-permanently", value: "true" }
+
+- name: "GNOME Apps Settings | Rhythmbox"
+  community.general.dconf:
+    key: "/org/gnome/rhythmbox/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "library/layout-filename", value: "'%ta - %tt'" }
+    - { key: "library/layout-path", value: "'%aa - %at'" }
+
+- name: "GNOME Apps Settings | GNOME Software"
+  community.general.dconf:
+    key: "/org/gnome/software/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "allow-updates", value: "false" }
+    - { key: "download-updates", value: "false" }
+    - { key: "show-nonfree-prompt", value: "false" }
+
+- name: "GNOME Apps Settings | GNOME Terminal"
+  community.general.dconf:
+    key: "/org/gnome/terminal/legacy/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "profiles:/list", value: "['b1dcc9dd-5262-4d8d-a863-c897e6d979b9', 'e834a028-1aa0-49b7-a8b3-e275b61c44c7']" }
+    - { key: "menu-accelerator-enabled", value: "false" }
+    - { key: "keybindings/zoom-in", value: "'disabled'" }
+    - { key: "keybindings/zoom-normal", value: "'disabled'" }
+    - { key: "keybindings/zoom-out", value: "'disabled'" }
+
+- name: "GNOME Apps Settings | GNOME Terminal: Default profile"
+  community.general.dconf:
+    key: "/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/{{ item.key }}"
+    value: "{{ item.value | string }}"
+    state: present
+  loop:
+    - { key: "audible-bell", value: "false" }
+    - { key: "background-color", value: "'rgb(28,28,28)'" }
+    - { key: "default-size-columns", value: "100" }
+    - { key: "default-size-rows", value: "30" }
+    - { key: "foreground-color", value: "'rgb(252,252,252)'" }
+    - { key: "highlight-background-color", value: "'rgb(255,250,205)'" }
+    - { key: "highlight-colors-set", value: "true" }
+    - { key: "highlight-foreground-color", value: "'rgb(0,0,0)'" }
+    - { key: "palette", value: "['rgb(63,66,68)', 'rgb(237,21,21)', 'rgb(17,209,22)', 'rgb(246,116,0)', 'rgb(29,153,243)', 'rgb(155,89,182)', 'rgb(26,188,156)', 'rgb(252,252,252)', 'rgb(127,140,141)', 'rgb(192,57,43)', 'rgb(28,220,154)', 'rgb(253,188,75)', 'rgb(61,174,233)', 'rgb(142,68,173)', 'rgb(22,160,133)', 'rgb(255,255,255)']" }
+    - { key: "scrollbar-policy", value: "'never'" }
+    - { key: "use-theme-colors", value: "false" }
+    - { key: "visible-name", value: "'Default'" }
+
+- name: "GNOME Apps Settings | GNOME Terminal: Multiplexer profile"
+  community.general.dconf:
+    key: "/org/gnome/terminal/legacy/profiles:/:e834a028-1aa0-49b7-a8b3-e275b61c44c7/{{ item.key }}"
+    value: "{{ item.value | string }}"
+    state: present
+  loop:
+    - { key: "audible-bell", value: "false" }
+    - { key: "background-color", value: "'rgb(28,28,28)'" }
+    - { key: "custom-command", value: "'/usr/bin/tmux new -As TMUX'" }
+    - { key: "bold-is-bright", value: "false" }
+    - { key: "default-size-columns", value: "100" }
+    - { key: "default-size-rows", value: "30" }
+    - { key: "foreground-color", value: "'rgb(252,252,252)'" }
+    - { key: "highlight-background-color", value: "'rgb(255,250,205)'" }
+    - { key: "highlight-colors-set", value: "true" }
+    - { key: "highlight-foreground-color", value: "'rgb(0,0,0)'" }
+    - { key: "palette", value: "['rgb(63,66,68)', 'rgb(237,21,21)', 'rgb(17,209,22)', 'rgb(246,116,0)', 'rgb(29,153,243)', 'rgb(155,89,182)', 'rgb(26,188,156)', 'rgb(252,252,252)', 'rgb(127,140,141)', 'rgb(192,57,43)', 'rgb(28,220,154)', 'rgb(253,188,75)', 'rgb(61,174,233)', 'rgb(142,68,173)', 'rgb(22,160,133)', 'rgb(255,255,255)']" }
+    - { key: "scrollbar-policy", value: "'never'" }
+    - { key: "use-custom-command", value: "true" }
+    - { key: "use-theme-colors", value: "false" }
+    - { key: "visible-name", value: "'Multiplexer'" }
+
+- name: "GNOME Apps Settings | Virt-manager"
+  community.general.dconf:
+    key: "/org/virt-manager/virt-manager/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "connections/autoconnect", value: "['qemu:///system', 'qemu:///session']" }
+    - { key: "connections/uris", value: "['qemu:///session', 'qemu:///system']" }

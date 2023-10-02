@@ -1,0 +1,11 @@
+- name: "Changing journald configuration"
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/system.conf
+    state: present
+    regexp: "^#?{{ item | split('=') | first }}"
+    line: "{{ item }}"
+  loop:
+    - DefaultTimeoutStopSec=30s
+  notify:
+    - reload-systemd

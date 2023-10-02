@@ -1,0 +1,23 @@
+- name: "Install systemd-zram-generator package"
+  become: true
+  ansible.builtin.apt:
+    name: "systemd-zram-generator"
+    state: present
+  notify: apt-clean
+
+- name: "Configure systemd-zram-generator"
+  become: true
+  ansible.builtin.copy:
+    src: etc/systemd/zram-generator.conf
+    dest: /etc/systemd/zram-generator.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: "Set vm.swappiness to 30"
+  become: true
+  ansible.posix.sysctl:
+    name: vm.swappiness
+    value: "30"
+    sysctl_file: /etc/sysctl.d/60-zram-swappiness.conf
+    state: present

@@ -1,0 +1,42 @@
+- name: "Rofi | Install"
+  become: true
+  ansible.builtin.apt:
+    name: rofi
+    state: present
+
+- name: "Rofi | Read /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+  community.general.dconf:
+    key: /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings
+    state: read
+  register: r_custom_keybindings
+
+- name: "Rofi | Binding combi to Super+Enter"
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/rofi-combi/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "binding", value: "'<Super>Return'" }
+    - { key: "command", value: "'rofi -show combi'" }
+    - { key: "name", value: "'Rofi'" }
+
+- name: "Rofi | Binding filebrowser to Supper+f"
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/rofi-filebrowser/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "binding", value: "'<Super>f'" }
+    - { key: "command", value: "'rofi -show filebrowser'" }
+    - { key: "name", value: "'Rofi (filebrowser)'" }
+
+- name: "Rofi | Add new custom keybinding to the list"
+  community.general.dconf:
+    key: /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings
+    value: "{{ (custom_keybindings + added_keybindinns) | unique }}"
+    state: present
+  vars:
+    custom_keybindings: "{{ r_custom_keybindings.value | from_yaml | default([], true) }}"
+    added_keybindinns:
+      - '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/rofi-combi/'
+      - '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/rofi-filebrowser/'

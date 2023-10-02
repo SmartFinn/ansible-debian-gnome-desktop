@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ "$2" = "vpn-up" ]; then
+	# Change MTU for IKEv2 VPN connection
+	# FIXME: find the way execute it only for IKEv2
+	/usr/sbin/ip link set mtu 1394 dev "${DEVICE_IFACE:?}"
+fi

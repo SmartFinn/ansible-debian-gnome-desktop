@@ -1,0 +1,5 @@
+- name: "Peek | Install"
+  become: true
+  ansible.builtin.apt:
+    name: peek
+    state: present

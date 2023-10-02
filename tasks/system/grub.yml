@@ -1,0 +1,11 @@
+- name: "Configure GRUB2"
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    state: present
+    regexp: "^#?{{ item | split('=') | first }}"
+    line: "{{ item }}"
+  loop:
+    - GRUB_TIMEOUT=5
+    - GRUB_DEFAULT=saved
+  notify: update-grub

@@ -1,0 +1,5 @@
+- name: "qBittorrent | Install"
+  become: true
+  ansible.builtin.apt:
+    name: qbittorrent
+    state: present

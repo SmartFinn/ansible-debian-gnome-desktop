@@ -1,0 +1,84 @@
+- name: "Set common params for i915 module"
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/i915.conf
+    content: |
+      # /etc/modprobe.d/i915.conf
+
+      # Enable framebuffer compression
+      options i915 enable_fbc=1
+      # Avoid any flickering until Xorg has started
+      options i915 fastboot=1
+    mode: '0644'
+
+- name: "Install Intel GPU tools and VA utils"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - intel-gpu-tools
+      - vainfo
+    state: present
+
+- name: "Set cap_perfmon=+ep on intel_gpu_top"
+  become: true
+  community.general.capabilities:
+    path: /usr/bin/intel_gpu_top
+    capability: cap_perfmon=+ep
+    state: present
+
+- name: "Add the current user to 'video' group"
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    groups: video
+    append: true
+    state: present
+
+- name: "Create /etc/environment.d/ directory"
+  become: true
+  ansible.builtin.file:
+    path: /etc/environment.d/
+    state: directory
+    mode: '0755'
+
+- name: "Setup Intel Media Driver for VAAPI"
+  when: modern_intel_driver|bool
+  block:
+    - name: "Install Intel Media Driver for VAAPI — Broadwell+ iGPUs"
+      become: true
+      ansible.builtin.apt:
+        name: "intel-media-va-driver{{ '-non-free' if non_free|bool }}"
+        state: present
+
+    - name: "Specify driver name for VAAPI"
+      become: true
+      ansible.builtin.copy:
+        dest: /etc/environment.d/20-libva-driver.conf
+        content: |
+          LIBVA_DRIVER_NAME=iHD
+        mode: '0644'
+
+- name: "Setup i965 Intel driver for VAAPI"
+  when: not modern_intel_driver|bool
+  block:
+    - name: "Install Intel Media Driver for VAAPI for older iGPUs"
+      become: true
+      ansible.builtin.apt:
+        name: "i965-va-driver{{ '-shaders' if non_free|bool }}"
+        state: present
+
+    - name: "Specify driver name for VAAPI"
+      become: true
+      ansible.builtin.copy:
+        dest: /etc/environment.d/20-libva-driver.conf
+        content: |
+          LIBVA_DRIVER_NAME=i965
+        mode: '0644'
+
+- name: "Fix tearing on Intel graphics (X11)"
+  become: true
+  ansible.builtin.copy:
+    src: etc/X11/xorg.conf.d/20-intel-graphics.conf
+    dest: /etc/X11/xorg.conf.d/20-intel-graphics.conf
+    mode: '0644'
+  when: xorg_tearfree|bool

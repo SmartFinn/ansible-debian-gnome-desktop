@@ -1,0 +1,7 @@
+- name: "Inkscape | Install Flatpak"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak:
+    name: org.inkscape.Inkscape
+    remote: flathub
+    method: "{{ flatpak_install_method }}"
+    state: present

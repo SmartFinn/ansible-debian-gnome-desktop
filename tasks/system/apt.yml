@@ -1,0 +1,17 @@
+- name: "APT | No install recommends"
+  become: true
+  ansible.builtin.copy:
+    src: etc/apt/apt.conf.d/90no-install-recommends.conf
+    dest: /etc/apt/apt.conf.d/90no-install-recommends.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: "APT | Configure apt-get"
+  become: true
+  ansible.builtin.copy:
+    src: etc/apt/apt.conf.d/98apt_get.conf
+    dest: /etc/apt/apt.conf.d/98apt_get.conf
+    owner: root
+    group: root
+    mode: '0644'

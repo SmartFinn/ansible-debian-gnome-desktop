@@ -1,0 +1,12 @@
+[Unit]
+Description=Per-link DNS configuration for {{ hostvars[inventory_hostname]['ansible_' + item]['device'] }}
+BindsTo=sys-subsystem-net-devices-{{ hostvars[inventory_hostname]['ansible_' + item]['device'] }}.device
+After=sys-subsystem-net-devices-{{ hostvars[inventory_hostname]['ansible_' + item]['device'] }}.device systemd-resolved.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/resolvectl dns {{ hostvars[inventory_hostname]['ansible_' + item]['device'] }} {{ hostvars[inventory_hostname]['ansible_' + item]['ipv4']['address'] }}
+ExecStart=/usr/bin/resolvectl domain {{ hostvars[inventory_hostname]['ansible_' + item]['device'] }} '~{{ libvirt_domain_name }}'
+
+[Install]
+WantedBy=sys-subsystem-net-devices-{{ hostvars[inventory_hostname]['ansible_' + item]['device'] }}.device

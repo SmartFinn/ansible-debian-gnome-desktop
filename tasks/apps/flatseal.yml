@@ -1,0 +1,7 @@
+- name: "Flatseal | Install Flatpak"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak:
+    name: com.github.tchx84.Flatseal
+    remote: flathub
+    method: "{{ flatpak_install_method }}"
+    state: present

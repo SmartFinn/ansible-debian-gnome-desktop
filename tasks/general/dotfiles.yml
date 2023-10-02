@@ -1,0 +1,8 @@
+- name: "Download and extract dotfiles"
+  ansible.builtin.unarchive:
+    src: https://github.com/SmartFinn/dotfiles/archive/refs/heads/master.tar.gz
+    dest: "{{ ansible_user_dir }}"
+    remote_src: true
+    extra_opts:
+      - --strip-components=1
+    creates: "{{ ansible_user_dir }}/.config/zsh/.zshrc"

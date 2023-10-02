@@ -1,0 +1,7 @@
+- name: "SQLiteBrowser | Install Flatpak"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak:
+    name: org.sqlitebrowser.sqlitebrowser
+    remote: flathub
+    method: "{{ flatpak_install_method }}"
+    state: present

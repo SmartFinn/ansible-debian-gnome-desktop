@@ -1,0 +1,6 @@
+#!/bin/sh
+
+if [ "$2" = "vpn-down" ]; then
+	# Back MTU to default value
+	/usr/sbin/ip link set mtu 1500 dev "${DEVICE_IFACE:?}"
+fi

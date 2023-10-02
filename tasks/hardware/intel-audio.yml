@@ -1,0 +1,8 @@
+- name: "Disable popping sound on Intel HDA audio"
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/snd_hda_intel.conf
+    content: |
+      # Fix annoying popping sound
+      options snd_hda_intel power_save=0
+    mode: '0644'

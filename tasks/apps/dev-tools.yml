@@ -1,0 +1,38 @@
+- name: "Dev tools | Install"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - black
+      - curl
+      - dash
+      - gh
+      - git
+      - git-crypt
+      - git-extras
+      - git-lfs
+      - jid
+      - jc
+      - jq
+      - make
+      - mycli
+      - nodejs
+      - npm
+      - osc
+      - ansible-lint
+      - python3-autopep8
+      - bpython
+      - flake8
+      - python3-pip
+      - ripgrep
+      - shellcheck
+      - shfmt
+      - sqlite3
+      - xmlstarlet
+    state: present
+
+- name: "Dev tools | Install (Debian Sid only)"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - git-delta
+  when: debian_sid|bool

@@ -1,0 +1,24 @@
+- name: "GPXSee | Install"
+  become: true
+  vars:
+    debian_version: "{{ 'Unstable' if debian_sid | bool else ansible_distribution_major_version }}"
+  block:
+    - name: "GPXSee | Get GPG key"
+      become: true
+      ansible.builtin.get_url:
+        url: "https://download.opensuse.org/repositories/home:tumic:GPXSee/{{ ansible_distribution }}_{{ debian_version }}/Release.key"
+        dest: /etc/apt/trusted.gpg.d/home:tumic:GPXSee.asc
+        mode: '0644'
+
+    - name: "GPXSee | Add Repository"
+      become: true
+      ansible.builtin.apt_repository:
+        repo: "deb http://download.opensuse.org/repositories/home:/tumic:/GPXSee/{{ ansible_distribution }}_{{ debian_version }}/ /"
+        filename: home:tumic:GPXSee
+        state: present
+
+    - name: "GPXSee | Install"
+      become: true
+      ansible.builtin.apt:
+        name: gpxsee
+        state: present

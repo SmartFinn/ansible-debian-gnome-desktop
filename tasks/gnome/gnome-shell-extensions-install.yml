@@ -1,0 +1,73 @@
+- name: "GNOME extension install | Get GNOME Shell version"
+  block:
+    - name: "GNOME extension install | Grep GNOME Shell version"
+      ansible.builtin.shell: "gnome-shell --version | grep -oP '[0-9.]+'"
+      register: r_grep_gnome_shell_version
+      changed_when: false
+
+    - name: "GNOME extension install | Set gnome_shell_version var"
+      ansible.builtin.set_fact:
+        gnome_shell_version: "{{ r_grep_gnome_shell_version.stdout }}"
+
+# Get list of extensions without GNOME Shell restarts
+- name: "GNOME extension install | Get list of directories of installed extensions"
+  ansible.builtin.find:
+    paths:
+      - /usr/share/gnome-shell/extensions/
+      - "{{ '~/.local/share/gnome-shell/extensions' | expanduser }}"
+    file_type: directory
+  register: r_gnome_extensions_dirs
+  changed_when: false
+
+- name: "GNOME extension install | Set list of installed extensions"
+  ansible.builtin.set_fact:
+    gnome_extensions_installed: "{{ r_gnome_extensions_dirs.files | map(attribute='path') | map('basename') | unique }}"
+
+- name: "GNOME extension install | Get extension info"
+  ansible.builtin.uri:
+    url: https://extensions.gnome.org/extension-info/?uuid={{ uuid }}&shell_version={{ gnome_shell_version }}
+    return_content: true
+  when: (uuid not in gnome_extensions_installed)
+  loop: "{{ gnome_extensions }}"
+  loop_control:
+    loop_var: uuid
+  register: r_gnome_extension_info
+  ignore_errors: true
+
+- name: "GNOME extension install | Download extensions from extensions.gnome.org"
+  ansible.builtin.get_url:
+    url: "{{ 'https://extensions.gnome.org' + extention_info.json.download_url }}"
+    dest: "/tmp/{{ extention_info.json.uuid }}.zip"
+    mode: '0644'
+  when: ('skipped' not in extention_info)
+  loop: "{{ r_gnome_extension_info.results }}"
+  loop_control:
+    loop_var: extention_info
+    label: "{{ extention_info.uuid }}"
+  register: r_downloaded_extentions
+
+- name: "GNOME extension install | Install GNOME Shell extensions"
+  ansible.builtin.command:
+    cmd: "gnome-extensions install {{ item.dest }}"
+    creates: "{{ '~/.local/share/gnome-shell/extensions/' + item.extention_info.uuid + '/metadata.json' | expanduser }}"
+  when: ('skipped' not in item) and (item.status_code == 200)
+  loop: "{{ r_downloaded_extentions.results }}"
+  loop_control:
+    label: "{{ item.extention_info.uuid }}"
+
+# Enable extensions without gnome-extensions command and GNOME Shell restarts
+- name: "GNOME extension install | Read /org/gnome/shell/enabled-extensions"
+  community.general.dconf:
+    key: /org/gnome/shell/enabled-extensions
+    state: read
+  register: r_enabled_extensions
+
+- name: "GNOME extension install | Create a list of enabled extensions"
+  ansible.builtin.set_fact:
+    gnome_extensions_enabled: "{{ r_enabled_extensions.value | from_yaml | default([], true) }}"
+
+- name: "GNOME extension install | Enable extensions"
+  community.general.dconf:
+    key: /org/gnome/shell/enabled-extensions
+    value: "{{ (gnome_extensions_enabled + gnome_extensions) | unique }}"
+    state: present

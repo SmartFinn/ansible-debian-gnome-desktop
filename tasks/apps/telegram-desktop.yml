@@ -1,0 +1,16 @@
+- name: "Telegram Desktop | Install"
+  become: true
+  ansible.builtin.apt:
+    name: telegram-desktop
+    state: present
+  when: not force_flatpak|bool
+
+- name: "Telegram Desktop | Install Flatpak"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak:
+    name: org.telegram.desktop
+    remote: flathub
+    method: "{{ flatpak_install_method }}"
+    state: present
+  when: force_flatpak|bool
+  tags: flatpak

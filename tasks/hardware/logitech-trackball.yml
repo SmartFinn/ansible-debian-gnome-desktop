@@ -1,0 +1,6 @@
+- name: "Setup Logitech trackball"
+  become: true
+  ansible.builtin.copy:
+    src: etc/X11/xorg.conf.d/51-vmmouse.conf
+    dest: /etc/X11/xorg.conf.d/51-vmmouse.conf
+    mode: '0644'

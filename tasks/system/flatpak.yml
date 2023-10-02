@@ -1,0 +1,20 @@
+- name: "Flatpak | Install"
+  become: true
+  ansible.builtin.apt:
+    name: flatpak
+    state: present
+
+- name: "Flatpak | Add Flathub repository"
+  become: "{{ flatpak_install_method == 'system' }}"
+  community.general.flatpak_remote:
+    name: flathub
+    flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+    method: "{{ flatpak_install_method }}"
+    state: present
+
+- name: "Flatpak | Improve UI integration"
+  become: "{{ flatpak_install_method == 'system' }}"
+  ansible.builtin.shell:
+    cmd: >
+      flatpak --{{ flatpak_install_method }} override --filesystem=xdg-config/gtk-3.0:ro;
+      flatpak --{{ flatpak_install_method }} override --filesystem=xdg-config/gtk-4.0:ro;

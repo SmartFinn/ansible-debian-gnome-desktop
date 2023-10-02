@@ -1,0 +1,5 @@
+- name: "Barrier | Install"
+  become: true
+  ansible.builtin.apt:
+    name: barrier
+    state: present

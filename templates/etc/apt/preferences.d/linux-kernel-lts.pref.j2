@@ -1,0 +1,6 @@
+{% for pin_package in pin_packages %}
+Package: {{ pin_package }}
+Pin: release {{ pin_release }}
+Pin-Priority: {{ pin_priority }}
+
+{% endfor %}

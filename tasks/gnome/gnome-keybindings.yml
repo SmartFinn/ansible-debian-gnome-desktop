@@ -1,0 +1,7 @@
+- name: "GNOME Desktop keybindings"
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: "control-center", value: "['<Super>comma']" }

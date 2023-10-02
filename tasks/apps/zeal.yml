@@ -1,0 +1,5 @@
+- name: "Zeal | Install"
+  become: true
+  ansible.builtin.apt:
+    name: zeal
+    state: present
