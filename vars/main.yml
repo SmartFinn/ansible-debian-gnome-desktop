@@ -4,6 +4,9 @@
 # auto-detect
 debian_sid: "{{ ansible_lsb.description | split('/') | last == 'sid' }}"
 
+# Specify Debian mirror for /etc/apt/sources.list
+debian_mirror: "deb.debian.org"
+
 # Use contrib and non-free components
 non_free: true
 

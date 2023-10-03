@@ -54,6 +54,7 @@ The optional variable may be set with `-e var=value` options to `ansible-pull` o
 - `surfshark_servers` - list of Surfshark servers (e.g. `-e "surfshark_servers=['uk-lon.prod.surfshark.com','ua-iev.prod.surfshark.com']"`)
 - `zerotier_network_id` - join ZeroTier network if the variable is defined (e.g. `-e zerotier_network_id=8056c2e21c000001`)
 - `debian_sid` - install packages and upgrade the system to Debian Unstable (e.g. `-e debian_sid=true`)
+- `debian_mirror` - specify Debian mirror for /etc/apt/sources.list (e.g. `-e debian_mirror=debian.csail.mit.edu`)
 - `non_free` - install packages with non-free components (default) (e.g. `-e non_free=false`)
 - `kernel_lts` - do not install newer Linux kernels from backports and sid (default) (e.g. `-e kernel_lts=false`)
 - `force_flatpak` - using Flatpak instead of native packages from third-party repos if there is a choice (e.g. `-e force_flatpak=true`)
