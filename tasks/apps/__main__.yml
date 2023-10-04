@@ -161,6 +161,11 @@
     - neovim
     - dev
 
+- name: "Install Nix package manager"
+  ansible.builtin.import_tasks: nix.yml
+  tags:
+    - nix
+
 - name: "Install Obsidian"
   ansible.builtin.import_tasks: obsidian.yml
   tags:

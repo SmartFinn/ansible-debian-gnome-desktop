@@ -150,6 +150,7 @@ To run only specific tasks use `--tags tag1,tag2,tagN` option and to exclude tas
 | `meld` | `dev` | Visual diff and merge tool |
 | `mpv` | `desktop` | Movie player playing most video formats |
 | `neovim` | `dev` | Add repository and install Neovim |
+| `nix` | — | Install Nix package manager |
 | `obsidian` | `desktop`, `flatpak` | Markdown-based knowledge base |
 | `peek` | — | Animated GIF screen recorder with an easy to use interface |
 | `qbittorrent` | `desktop` | A Bittorrent Client |

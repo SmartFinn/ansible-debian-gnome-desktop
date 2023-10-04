@@ -1,0 +1,15 @@
+- name: "Nix | Install"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - nix-bin
+      - nix-setup-systemd
+    state: present
+
+- name: "Nix | Add the user to nix-users group"
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    groups: nix-users
+    append: true
+    state: present
