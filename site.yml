@@ -1,7 +1,6 @@
 ---
 - name: "Setup Debian"
-  hosts: localhost
-  connection: local
+  hosts: all
   gather_facts: true
 
   vars_files:

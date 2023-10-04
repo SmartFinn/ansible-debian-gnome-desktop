@@ -1,0 +1,39 @@
+---
+
+- name: "Setup system"
+  ansible.builtin.import_tasks: tasks/system/__main__.yml
+  tags:
+    - system
+
+- name: "Setup network"
+  ansible.builtin.import_tasks: tasks/network/__main__.yml
+  tags:
+    - network
+
+- name: "Setup hardware"
+  ansible.builtin.import_tasks: tasks/hardware/__main__.yml
+  tags:
+    - hardware
+
+- name: "Setup GNOME"
+  ansible.builtin.import_tasks: tasks/gnome/__main__.yml
+  tags:
+    - gnome
+
+- name: "Setup apps"
+  ansible.builtin.import_tasks: tasks/apps/__main__.yml
+  tags:
+    - apps
+    - never
+
+- name: "Mount BTRFS subvolume id=0"
+  ansible.builtin.import_tasks: tasks/general/mount-btrfs-subvolid0.yml
+  tags:
+    - btrfs-subvolid0
+    - never
+
+- name: "Download and install dotfiles"
+  ansible.builtin.import_tasks: tasks/general/dotfiles.yml
+  tags:
+    - dotfiles
+    - never
