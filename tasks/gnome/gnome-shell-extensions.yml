@@ -12,7 +12,6 @@
   ansible.builtin.import_tasks: gnome-shell-extensions-install.yml
   vars:
     gnome_extensions:
-      - "appindicatorsupport@rgcjonas.gmail.com"
       - "argos@pew.worldwidemann.com"
       - "autohide-battery@sitnik.ru"
       - "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
@@ -25,6 +24,7 @@
       - "quick-lang-switch@ankostis.gmail.com"
       - "system-monitor@paradoxxx.zero.gmail.com"
       - "task-widget@juozasmiskinis.gitlab.io"
+      - "ubuntu-appindicators@ubuntu.com"
       - "unite@hardpixel.eu"
       - "user-theme@gnome-shell-extensions.gcampax.github.com"
       - "windowIsReady_Remover@nunofarruca@gmail.com"
