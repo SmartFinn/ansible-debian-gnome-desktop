@@ -9,3 +9,11 @@
     - DefaultTimeoutStopSec=30s
   notify:
     - reload-systemd
+
+- name: "Add the current user to 'adm' group to read log messages"
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    groups: adm
+    append: true
+    state: present
