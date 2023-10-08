@@ -30,6 +30,7 @@
       loop: "{{ zaborona_help_certs }}"
 
     - name: "Create an OpenVPN connection to Zaborona.help"
+      become: true
       community.general.nmcli:
         type: vpn
         conn_name: "zaborona.help"
@@ -41,7 +42,7 @@
           key: "{{ zaborona_help_certs[2].path }}"
           cert-pass-flags: 0
           remote-cert-tls: server
-          cipher: "none"
+          cipher: "AES-128-CBC"
           dev: tun
           dev-type: tun
           proto-tcp: true
