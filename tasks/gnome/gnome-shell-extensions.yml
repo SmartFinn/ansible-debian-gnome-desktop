@@ -6,6 +6,10 @@
       - gnome-shell-extension-dashtodock
       - gnome-shell-extension-gsconnect
       - gnome-shell-extension-system-monitor
+      # Install Task Widget dependencies
+      - gir1.2-edataserver-1.2
+      - gir1.2-ecal-2.0
+      - gir1.2-ical-3.0
     state: present
 
 - name: "GNOME Shell | Install and enable extensions"
