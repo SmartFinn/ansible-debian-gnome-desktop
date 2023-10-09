@@ -3,6 +3,7 @@
   ansible.builtin.apt:
     name:
       - black
+      - build-essential
       - curl
       - dash
       - gh
