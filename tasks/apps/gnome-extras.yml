@@ -8,9 +8,11 @@
       - gucharmap
       - file-roller
       - seahorse
+      - libsecret-tools
       - gnome-sushi
       # fonts
       - fonts-firacode
+      - fonts-hack
       - fonts-roboto
       - fonts-jetbrains-mono
       # spellcheck
