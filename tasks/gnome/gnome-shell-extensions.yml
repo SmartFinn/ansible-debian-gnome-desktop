@@ -158,7 +158,7 @@
     - { key: "time/always-enable-ondemand", value: "true" }
     - { key: "time/ondemand-button-placement", value: "'menu'" }
     - { key: "time/ondemand-time", value: "'night'" }
-    - { key: "time/offset", value: "1" }
+    - { key: "time/offset", value: "0.5" }
     - { key: "time/time-source", value: "'nightlight'" }
 
 - name: "GNOME Shell | Task Widget"
