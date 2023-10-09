@@ -5,6 +5,14 @@
       - papirus-icon-theme
     state: present
 
+- name: "GNOME | Install QGnomePlatform theme for Qt apps"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - adwaita-qt
+      - qgnomeplatform-qt5
+    state: present
+
 - name: "GNOME | Force 'gnome' as default theme engine for Qt apps"
   become: true
   ansible.builtin.copy:
