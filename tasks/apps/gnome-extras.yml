@@ -3,6 +3,7 @@
   ansible.builtin.apt:
     name:
       - dconf-editor
+      - eog-plugins
       - evolution
       - gnome-tweaks
       - gucharmap

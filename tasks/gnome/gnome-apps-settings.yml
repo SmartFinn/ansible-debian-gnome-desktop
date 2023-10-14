@@ -52,6 +52,7 @@
     - { key: "view/background-color", value: "'rgb(46,52,54)'" }
     - { key: "view/trans-color", value: "'rgb(46,52,54)'" }
     - { key: "view/transparency", value: "'background'" }
+    - { key: "plugins/active-plugins", value: "['fit-to-width', 'map', 'statusbar-date', 'fullscreen']" }
 
 - name: "GNOME Apps Settings | Evolution"
   community.general.dconf:
