@@ -83,6 +83,7 @@
 - name: "Install GNOME extras"
   ansible.builtin.import_tasks: gnome-extras.yml
   tags:
+    - gnome-extras
     - desktop
 
 - name: "Install Google Chrome"
