@@ -28,3 +28,8 @@
   become: true
   ansible.builtin.command:
     cmd: update-grub
+
+- name: update-initramfs
+  become: true
+  ansible.builtin.command:
+    cmd: /sbin/update-initramfs -u

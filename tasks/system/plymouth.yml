@@ -1,0 +1,29 @@
+- name: "Plymouth | Install themes"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - plymouth-themes
+      - plymouth-x11
+    state: present
+
+- name: "Plymouth | Set theme"
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/plymouth/plymouthd.conf
+    content: |
+      # Administrator customizations go in this file
+      [Daemon]
+      Theme=bgrt
+    mode: '0644'
+  notify: update-initramfs
+
+- name: "Plymouth | Enable splash in GRUB"
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="((?:(?!{{ item }}).)*?)"$'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="\1 {{ item }}"'
+    backrefs: true
+  loop:
+    - rhgb
+  notify: update-grub

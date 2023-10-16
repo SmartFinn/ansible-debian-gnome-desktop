@@ -9,3 +9,13 @@
     - GRUB_TIMEOUT=5
     - GRUB_DEFAULT=saved
   notify: update-grub
+
+- name: "Copy script that disable TPM module in Grub2"
+  become: true
+  ansible.builtin.copy:
+    src: etc/grub.d/03_disable_tpm_module
+    dest: /etc/grub.d/03_disable_tpm_module
+    owner: root
+    group: root
+    mode: "0644"
+  notify: update-grub

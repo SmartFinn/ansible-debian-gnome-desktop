@@ -36,5 +36,5 @@
 - name: "Configure GRUB2"
   ansible.builtin.import_tasks: grub.yml
 
-- name: "Disable TPM module in GRUB2"
-  ansible.builtin.import_tasks: grub-disable-tpm.yml
+- name: "Setup bootsplash"
+  ansible.builtin.import_tasks: plymouth.yml
