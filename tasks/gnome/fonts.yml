@@ -1,0 +1,34 @@
+- name: "Fonts | Install"
+  become: true
+  ansible.builtin.apt:
+    name:
+      - fonts-firacode
+      - fonts-hack
+      - fonts-jetbrains-mono
+      - fonts-roboto
+      - fonts-ubuntu
+      - ttf-mscorefonts-installer
+    state: present
+
+- name: "Fonts | Setup configs"
+  become: true
+  vars:
+    fonts_conf:
+      - 11-lcdfilter-default.conf
+      - 20-no-embedded.conf
+      - 42-antialias.conf
+      - 68-color-emoji.conf
+  block:
+    - name: "Fonts | Copy configs to /etc/fonts/conf.avail"
+      ansible.builtin.copy:
+        src: "etc/fonts/conf.avail/{{ item }}"
+        dest: "/etc/fonts/conf.avail/{{ item }}"
+        mode: '0644'
+      loop: "{{ fonts_conf }}"
+
+    - name: "Fonts | Enable fonts configs"
+      ansible.builtin.file:
+        path: "/etc/fonts/conf.d/{{ item }}"
+        src: "../conf.avail/{{ item }}"
+        state: link
+      loop: "{{ fonts_conf }}"

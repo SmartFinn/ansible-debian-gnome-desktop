@@ -96,11 +96,13 @@ To run only specific tasks use `--tags tag1,tag2,tagN` option and to exclude tas
 |:----|:--------|:------------|
 | `gnome` | Yes | Master tag for *gnome* category. Use `--tags gnome` with `--skip-tags never` to skip unnecessary tasks |
 | `gnome-shell-extensions` | Yes | Install and configure GNOME Shell extensions |
+| `gnome-apps` | Yes | Install extra GNOME apps and utils |
 | `gnome-apps-settings` | Yes | Configure GNOME Apps |
 | `gnome-settings` | Yes | General GNOME settings |
 | `gnome-appearance` | Yes | Install and set themes |
 | `gnome-gestures` | No | Enable GNOME touchpad gestures on X11 |
 | `gdm-settings` | Yes | Configure GDM to act like GNOME Desktop |
+| `fonts` | Yes | Install extra fonts |
 | `user-icon` | No | Set icon for the user account |
 
 #### General
@@ -135,7 +137,6 @@ To run only specific tasks use `--tags tag1,tag2,tagN` option and to exclude tas
 | `flameshot` | `desktop` | Install Flameshot and setup keybindings |
 | `flatseal` | `desktop`, `flatpak` | Manage Flatpak permissions |
 | `gimp` | `desktop`, `flatpak` | Create images and edit photographs |
-| `gnome-extras` | `desktop` | GNOME apps and utils for GNOME Desktop |
 | `google-chrome` | — |  Add repository and install Google Chrome |
 | `google-cloud-cli` | — | Add repository and install gcloud utility |
 | `google-earth-pro` | `flatpak` | Add repository and install Google Earth Pro |

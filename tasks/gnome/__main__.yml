@@ -8,11 +8,10 @@
   tags:
     - gnome-shell-extensions
 
-- name: "Setup touchpad gestures on X11"
-  ansible.builtin.import_tasks: gnome-gestures.yml
+- name: "Install fonts"
+  ansible.builtin.import_tasks: fonts.yml
   tags:
-    - gnome-gestures
-    - never
+    - fonts
 
 - name: "Configure GNOME Appearance"
   ansible.builtin.import_tasks: gnome-appearance.yml
@@ -24,10 +23,21 @@
   tags:
     - gdm-settings
 
+- name: "Install extra GNOME apps"
+  ansible.builtin.import_tasks: gnome-apps.yml
+  tags:
+    - gnome-apps
+
 - name: "Configure GNOME Apps"
   ansible.builtin.import_tasks: gnome-apps-settings.yml
   tags:
     - gnome-apps-settings
+
+- name: "Setup touchpad gestures on X11"
+  ansible.builtin.import_tasks: gnome-gestures.yml
+  tags:
+    - gnome-gestures
+    - never
 
 - name: "Set icon for current user account"
   ansible.builtin.import_tasks: accountsservice.yml

@@ -1,4 +1,4 @@
-- name: "GNOME extras | Install"
+- name: "GNOME Apps | Install"
   become: true
   ansible.builtin.apt:
     name:
@@ -11,11 +11,6 @@
       - seahorse
       - libsecret-tools
       - gnome-sushi
-      # fonts
-      - fonts-firacode
-      - fonts-hack
-      - fonts-roboto
-      - fonts-jetbrains-mono
       # spellcheck
       - hunspell-ru
       - hunspell-uk
