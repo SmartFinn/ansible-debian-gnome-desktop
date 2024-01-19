@@ -58,3 +58,10 @@
       # Debian specific
       - apt-file
     state: present
+
+- name: "Add fd symlink to fdfind executable"
+  ansible.builtin.file:
+    src: /usr/bin/fdfind
+    dest: /usr/bin/fd
+    mode: '0755'
+    state: link
