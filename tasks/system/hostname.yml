@@ -11,6 +11,6 @@
 - name: "Set a hostname"
   become: true
   ansible.builtin.hostname:
-    name: "{{ hostname }}"
+    name: "{{ hostname | split('.') | first }}"
     use: systemd
   when: hostname is defined
