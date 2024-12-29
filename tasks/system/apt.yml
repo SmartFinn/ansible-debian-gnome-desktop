@@ -1,3 +1,12 @@
+- name: "APT | No keep downloaded packages"
+  become: true
+  ansible.builtin.copy:
+    src: etc/apt/apt.conf.d/01nocache.conf
+    dest: /etc/apt/apt.conf.d/01nocache.conf
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: "APT | No install recommends"
   become: true
   ansible.builtin.copy:
